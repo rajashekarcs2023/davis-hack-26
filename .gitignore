@@ -1,0 +1,45 @@
+# DAC sim repos — clone separately, not part of our repo
+drone-sim-main/
+robotsims-main/
+docs/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Env / secrets
+.env
+.env.local
+*.env.local
+
+# Node / frontend
+node_modules/
+dist/
+.next/
+out/
+.vercel/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.cursor/
+.windsurf/cache/
+
+# Backend run artifacts
+backend/app/data/runs/
+backend/.cache/
