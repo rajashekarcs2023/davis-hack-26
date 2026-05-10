@@ -31,6 +31,12 @@ class AnomalyLabel(str, Enum):
     NEEDS_IRRIGATION_INSPECTION = "needs_irrigation_inspection"
     NEEDS_HUMAN_REVIEW = "needs_human_review"
     FALSE_ALARM_CLOUD_NOISE = "false_alarm_cloud_noise"
+    # AgriScout multi-cause labels (added in pivot). The drone confirms a
+    # hotspot exists; these labels are the cause-hypotheses the agent picks
+    # between with help from ground-robot diagnostics.
+    PEST_HOTSPOT_SUSPECTED = "pest_hotspot_suspected"
+    WATER_STRESS_SUSPECTED = "water_stress_suspected"
+    NUTRIENT_DEFICIT_SUSPECTED = "nutrient_deficit_suspected"
 
 
 class Zone(BaseModel):
@@ -128,6 +134,114 @@ class GroundAnalysis(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# AgriScout multi-cause diagnostics (added in pivot)
+# ---------------------------------------------------------------------------
+
+
+class RiskAssessment(BaseModel):
+    """Multi-input risk score that decides whether the drone is dispatched.
+
+    Inputs are blended from satellite anomaly score, weather pest-risk index,
+    soil-moisture sensor reading, and historical hotspot history. The combined
+    score drives the `decision` enum and the human-readable `reason` text.
+
+    Demo note: weather, soil, and history inputs are seeded deterministically
+    per-zone for reproducibility. Production would wire to NWS API + ground
+    sensors + an outbreak-history database.
+    """
+
+    zone_id: str
+    satellite_anomaly_score: float = Field(ge=0.0, le=1.0)
+    weather_pest_risk: float = Field(ge=0.0, le=1.0)
+    soil_moisture: str  # "low" | "normal" | "high"
+    historical_hotspot_risk: float = Field(ge=0.0, le=1.0)
+    combined_risk_score: float = Field(ge=0.0, le=1.0)
+    decision: str  # IGNORE | MONITOR | SEND_DRONE | SEND_GROUND_ROBOT | CREATE_WORK_ORDER
+    reason: str
+
+
+class BeliefState(BaseModel):
+    """Snapshot of the agent's posterior belief over candidate causes.
+
+    Probabilities sum to ~1.0 (we don't enforce strictly because rounding
+    matters for the UI). The `snapshot_label` tags WHEN this snapshot was
+    taken so the frontend can animate transitions.
+    """
+
+    pest_hotspot: float = Field(ge=0.0, le=1.0)
+    water_stress: float = Field(ge=0.0, le=1.0)
+    nutrient_deficit: float = Field(ge=0.0, le=1.0)
+    false_alarm: float = Field(ge=0.0, le=1.0)
+    snapshot_label: str  # "initial" | "after_aerial" | "after_leaf" | "after_compare" | "after_probe" | "final"
+
+
+class LeafEvidence(BaseModel):
+    """Wrist-cam VLM output for a single leaf inspection.
+
+    Pest-specific signals get explicit booleans so the belief-state computer
+    can reason about them without parsing free text. `other` carries anything
+    the VLM saw that didn't fit the schema.
+    """
+
+    stippling: bool = False
+    webbing: bool = False
+    egg_masses: bool = False
+    discoloration: bool = False
+    other: list[str] = Field(default_factory=list)
+    confidence: float = Field(default=0.0, ge=0.0, le=1.0)
+    evidence_points: list[EvidencePoint] = Field(default_factory=list)
+
+
+class SoilProbeReading(BaseModel):
+    """Simulated soil-moisture probe reading.
+
+    Honest framing: `note` always carries a disclaimer that this is a
+    simulated sensor. Production would call into a real probe driver.
+    """
+
+    moisture_pct: float = Field(ge=0.0, le=100.0)
+    interpretation: str  # "dry" | "normal" | "wet"
+    note: str = "(simulated sensor reading)"
+
+
+class DiagnosticBundle(BaseModel):
+    """All ground-robot diagnostic outputs collected during a run.
+
+    Order matches the demo flow: leaf inspection → healthy comparison →
+    soil probe → marker placement. The `belief_evolution` list is the
+    sequence of BeliefState snapshots taken at each major step.
+    """
+
+    leaf_affected: LeafEvidence | None = None
+    leaf_healthy: LeafEvidence | None = None
+    soil_probe: SoilProbeReading | None = None
+    marker_placed: bool = False
+    belief_evolution: list[BeliefState] = Field(default_factory=list)
+
+
+class ErPolicyStep(BaseModel):
+    """One step of the Gemini Robotics-ER closed-loop embodied-reasoning policy.
+
+    The agent loop is:
+        for step in range(max_steps):
+            frame = <wrist cam>
+            step = vlm.analyze_er_policy(frame, zone, goal, current_pose)
+            if step.status == "arrived": break
+            actions = translate(step.target_point) -> [RobotAction, ...]
+            robot.dispatch(actions)
+
+    `target_point` uses the same [y, x] 0..1000 normalized convention as the
+    rest of our VLM outputs (Gemini Robotics-ER native pointing format).
+    `status` is the ER model's own assessment of whether the goal is met
+    so the loop can terminate on its own instead of always burning all steps.
+    """
+
+    target_point: list[int]  # [y, x] in 0..1000; where the robot should center the wrist cam next
+    status: str  # "navigating" | "arrived" | "lost"
+    reasoning: str  # short human-readable sentence; rendered in the VLA action log
+
+
+# ---------------------------------------------------------------------------
 # Run + work order
 # ---------------------------------------------------------------------------
 
@@ -171,6 +285,10 @@ class RunSummary(BaseModel):
     aerial_analysis: AerialAnalysis | None = None
     ground_analysis: GroundAnalysis | None = None
     work_order: WorkOrder | None = None
+    # AgriScout multi-cause additions (added in pivot). Both optional so the
+    # legacy irrigation flow keeps deserializing without changes.
+    risk_assessment: RiskAssessment | None = None
+    diagnostic_bundle: DiagnosticBundle | None = None
     started_at: datetime = Field(default_factory=lambda: datetime.now(tz=timezone.utc))
     finished_at: datetime | None = None
     tool_calls: list[dict[str, Any]] = Field(default_factory=list)
