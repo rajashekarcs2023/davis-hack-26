@@ -103,27 +103,60 @@ class RobotAdapter:
 
         Mapping is intentionally simple — zone column drives heading, zone row
         drives distance. The point is that the demo motion is reproducible, not
-        that we model the robot's odometry. Replace with a real motion planner
-        if the sim ever gets one.
+        that we model the robot's odometry.
+
+        Tuned for *visible, punchy* ARM motion in front of judges. The
+        ground field in the robot sim is tabletop-scaled (~1.6m long,
+        ~0.7m wide), so big base traversals push the robot past the
+        stress patch and out of camera view. The fix: a SHORT forward
+        nudge to position the wrist cam over the patch, then the demo
+        spends most of its time on the arm beats — shoulder dip, wrist
+        tilt, arm-turntable scan — which is what the user actually sees.
+
+        Motion budget per dispatch:
+          • drive forward         — 1 short 0.45-mag nudge (~0.27m).
+                                    Was 0.85 mag × 3-5 chunks = 1.5-2.5m,
+                                    which drove the robot off the field.
+          • arm-down              — deep shoulder + wrist dip so the
+                                    wrist cam clearly tilts toward soil
+          • scan flourish         — arm turntable rotate cw/ccw with
+                                    the arm down. Reads as "looking at
+                                    the crop" without flipping the base.
+
+        IMPORTANT — base-rotate tokens (`rotate_left`/`rotate_right`) are
+        deliberately AVOIDED. They drive the LeKiwi base which, in the
+        current sim physics, tips the robot over and ruins the demo.
+        For the scan flourish we use `rotate_cw`/`rotate_ccw` which act
+        on the SO101 arm turntable — same "scanning" visual, but the
+        base stays planted. We also drop the column-based orientation
+        rotate entirely: the robot already spawns roughly facing the
+        field, so we don't need a heading beat.
         """
         # Zone format: "<row letter><col number>", e.g. "B3"
-        col = max(1, int(zone_id[1:])) if len(zone_id) >= 2 and zone_id[1:].isdigit() else 1
-        row_idx = ord(zone_id[0].upper()) - ord("A") if len(zone_id) > 0 else 1
-        row_idx = max(0, row_idx)
+        # (Kept for parity with the docstring, not currently used now
+        # that we've dropped the column-based orientation rotate.)
+        _ = zone_id  # acknowledged, no per-zone heading change
 
         plan: list[RobotAction] = []
-        # Step 1: orient toward the row by rotating col-1 ticks (deterministic, bounded).
-        for _ in range(min(2, col - 1)):
-            plan.append(RobotAction(action="rotate_left", magnitude=0.25))
+        # Step 1: drive forward — ONE short nudge at 0.45 mag (~0.27m).
+        # Just enough to bring the wrist cam over the stress patch (which
+        # sits at z=-0.4 in the farm scene, with the robot starting near
+        # z=0.5). After this step the robot is positioned for the arm
+        # work and won't roll off the front of the field.
+        plan.append(RobotAction(action="drive_forward", magnitude=0.45))
 
-        # Step 2: drive forward (more for further-down rows).
-        forward_steps = max(1, min(4, row_idx + 1))
-        for _ in range(forward_steps):
-            plan.append(RobotAction(action="drive_forward", magnitude=0.45))
+        # Step 2: arm-down for closer ground inspection — deeper drop so
+        # the wrist cam clearly tilts toward the patch on camera. This is
+        # the visual focus of the dispatch_ground_robot beat.
+        plan.append(RobotAction(action="shoulder_down", magnitude=0.8))
+        plan.append(RobotAction(action="wrist_down", magnitude=0.7))
 
-        # Step 3: arm-down for closer ground inspection.
-        plan.append(RobotAction(action="shoulder_down", magnitude=0.35))
-        plan.append(RobotAction(action="wrist_down", magnitude=0.3))
+        # Step 3: scan flourish — arm-turntable rotate (NOT base rotate)
+        # so the wrist cam pans across the patch without tipping the
+        # robot. `rotate_cw` and `rotate_ccw` act on the SO101 base joint
+        # of the arm itself; the LeKiwi chassis stays planted.
+        plan.append(RobotAction(action="rotate_ccw", magnitude=0.7))
+        plan.append(RobotAction(action="rotate_cw", magnitude=0.7))
 
         return plan
 
