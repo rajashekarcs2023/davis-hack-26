@@ -1,7 +1,14 @@
 # DAC sim repos — clone separately, not part of our repo
+
 drone-sim-main/
-robotsims-main/
+projectplan/
 docs/
+robotsims-main/
+brainstorm.md   
+EXECUTION_PLAN.md
+final.md
+googleadk.md
+DEVPOST.md
 
 # Python
 __pycache__/
@@ -21,6 +28,8 @@ env/
 .env
 .env.local
 *.env.local
+.env.bak
+*.bak
 
 # Node / frontend
 node_modules/
