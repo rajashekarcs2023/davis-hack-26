@@ -1,0 +1,727 @@
+@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Space+Mono:wght@400;700&display=swap");
+
+:root {
+  --bg-panel: rgba(7, 13, 22, 0.7);
+  --bg-panel-border: rgba(133, 175, 255, 0.45);
+  --text-main: #d9ecff;
+  --text-muted: #9fbee2;
+  --accent: #82e3ff;
+  --accent-warn: #ffd36f;
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  color: var(--text-main);
+  font-family: "Rajdhani", sans-serif;
+  background:
+    radial-gradient(circle at 20% 20%, #103457 0%, transparent 35%),
+    radial-gradient(circle at 80% 12%, #19304d 0%, transparent 40%),
+    #02050a;
+}
+
+#cesiumContainer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+
+#hud,
+#status-panel,
+#api-test-panel {
+  position: fixed;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--bg-panel-border);
+  background: linear-gradient(165deg, var(--bg-panel), rgba(8, 16, 26, 0.42));
+  box-shadow: var(--shadow);
+}
+
+#hud {
+  top: 1rem;
+  left: 1rem;
+  min-width: 19rem;
+  padding: 0.9rem 1rem 1rem;
+}
+
+#api-test-panel {
+  top: 14.7rem;
+  left: 1rem;
+  width: min(19rem, calc(100vw - 2rem));
+  padding: 0.75rem 0.8rem 0.8rem;
+}
+
+.hud-title {
+  margin-bottom: 0.55rem;
+  letter-spacing: 0.09em;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.hud-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.22rem 1rem;
+  font-family: "Space Mono", monospace;
+  font-size: 0.83rem;
+}
+
+#status-panel {
+  right: 1rem;
+  top: 1rem;
+  width: min(23rem, calc(100vw - 2rem));
+  padding: 0.95rem 1rem;
+}
+
+.panel-title {
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+#status-panel p {
+  margin: 0.45rem 0;
+  font-size: 0.93rem;
+  line-height: 1.25;
+}
+
+#api-test-panel p {
+  margin: 0.25rem 0 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: "Space Mono", monospace;
+}
+
+#status-panel code {
+  font-family: "Space Mono", monospace;
+  color: #ffe8aa;
+}
+
+/* ─── Speed tier bar ─── */
+#speed-tier-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0.35rem;
+}
+
+.speed-tier-label {
+  font-family: "Space Mono", monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-right: 0.15rem;
+}
+
+.speed-btn {
+  flex: 1;
+  border: 1px solid rgba(130, 227, 255, 0.3);
+  background: rgba(130, 227, 255, 0.06);
+  color: var(--text-muted);
+  font-family: "Space Mono", monospace;
+  font-size: 0.73rem;
+  padding: 0.32rem 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.speed-btn:hover {
+  background: rgba(130, 227, 255, 0.15);
+  color: var(--text-main);
+}
+
+.speed-btn.active {
+  background: rgba(130, 227, 255, 0.22);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 8px rgba(130, 227, 255, 0.18);
+}
+
+.controls-title {
+  margin-top: 0.35rem;
+  color: var(--accent-warn);
+  font-family: "Space Mono", monospace;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.api-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.api-input {
+  min-width: 0;
+  border: 1px solid rgba(130, 227, 255, 0.3);
+  background: rgba(130, 227, 255, 0.08);
+  color: var(--text-main);
+  font-family: "Space Mono", monospace;
+  font-size: 0.7rem;
+  padding: 0.26rem 0.35rem;
+}
+
+#api-action-select {
+  flex: 1;
+}
+
+#api-magnitude-input {
+  width: 3.2rem;
+}
+
+#api-frame-fps {
+  width: 2.7rem;
+}
+
+#api-state-output {
+  margin: 0.35rem 0 0.35rem;
+  max-height: 4.5rem;
+  overflow: auto;
+  border: 1px solid rgba(130, 227, 255, 0.2);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-main);
+  font-family: "Space Mono", monospace;
+  font-size: 0.66rem;
+  line-height: 1.25;
+  padding: 0.35rem;
+  white-space: pre-wrap;
+}
+
+#api-frame-meta {
+  font-family: "Space Mono", monospace;
+  font-size: 0.67rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+#api-frame-preview {
+  width: 100%;
+  display: block;
+  border: 1px solid rgba(130, 227, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+  min-height: 68px;
+  object-fit: cover;
+}
+
+
+/* ─── Throttle gauge ─── */
+#throttle-gauge {
+  position: fixed;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tg-label {
+  font-family: "Space Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.tg-track {
+  position: relative;
+  width: 28px;
+  height: 180px;
+  border: 1px solid var(--bg-panel-border);
+  background: rgba(7, 13, 22, 0.75);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.tg-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, #44ff44, #82e3ff);
+  transition: height 0.08s linear;
+  opacity: 0.85;
+}
+
+.tg-hover-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 0;
+  border-top: 2px dashed rgba(255, 211, 111, 0.8);
+  z-index: 1;
+  bottom: 50%;
+  transition: bottom 0.08s linear;
+}
+
+.tg-percent {
+  font-family: "Space Mono", monospace;
+  font-size: 0.72rem;
+  color: var(--text-main);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ─── TerraScout AI live status panel (top-center) ─── */
+#terrascout-ai-status-panel {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 11;
+  min-width: 32rem;
+  max-width: min(48rem, calc(100vw - 2rem));
+  padding: 0.55rem 0.85rem 0.7rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--bg-panel-border);
+  background: linear-gradient(165deg, var(--bg-panel), rgba(8, 16, 26, 0.42));
+  box-shadow: var(--shadow);
+  font-family: "Rajdhani", sans-serif;
+}
+
+#terrascout-ai-status-panel .ts-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin: 0.18rem 0;
+}
+
+#terrascout-ai-status-panel .ts-brand {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  padding-right: 0.4rem;
+  border-right: 1px solid rgba(130, 227, 255, 0.25);
+  margin-right: 0.2rem;
+}
+
+#terrascout-ai-status-panel .ts-status {
+  font-family: "Space Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.18rem 0.45rem;
+  border: 1px solid currentColor;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+#terrascout-ai-status-panel .ts-status.idle      { color: #7a8da8; }
+#terrascout-ai-status-panel .ts-status.pending   { color: #9ad0ff; }
+#terrascout-ai-status-panel .ts-status.planning  { color: #82e3ff; }
+#terrascout-ai-status-panel .ts-status.await     { color: #ffd36f; animation: ts-pulse 1.5s ease-in-out infinite; }
+#terrascout-ai-status-panel .ts-status.exec      { color: #6effa6; animation: ts-pulse 1.0s ease-in-out infinite; }
+#terrascout-ai-status-panel .ts-status.ok        { color: #6effa6; }
+#terrascout-ai-status-panel .ts-status.reject    { color: #ff8a8a; }
+
+@keyframes ts-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
+  50%      { box-shadow: 0 0 6px 0 currentColor; opacity: 0.75; }
+}
+
+#terrascout-ai-status-panel .ts-zone {
+  font-family: "Space Mono", monospace;
+  font-size: 0.78rem;
+  color: var(--text-main);
+}
+
+#terrascout-ai-status-panel .ts-row-label {
+  font-family: "Space Mono", monospace;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  min-width: 5.5rem;
+}
+
+#terrascout-ai-status-panel .ts-chip {
+  font-family: "Space Mono", monospace;
+  font-size: 0.66rem;
+  padding: 0.16rem 0.42rem;
+  border: 1px solid rgba(130, 227, 255, 0.35);
+  background: rgba(130, 227, 255, 0.08);
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+#terrascout-ai-status-panel .ts-chip-ghost {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+#terrascout-ai-status-panel .ts-chip-tool {
+  border-color: rgba(130, 227, 255, 0.5);
+  background: rgba(130, 227, 255, 0.12);
+  color: #a8e9ff;
+}
+
+#terrascout-ai-status-panel .ts-chip-tool.fail {
+  border-color: rgba(255, 138, 138, 0.7);
+  background: rgba(255, 138, 138, 0.12);
+  color: #ff8a8a;
+}
+
+#terrascout-ai-status-panel .ts-chip-drone {
+  border-color: rgba(255, 211, 111, 0.55);
+  background: rgba(255, 211, 111, 0.10);
+  color: #ffd36f;
+}
+
+#terrascout-ai-status-panel .ts-chip-robot {
+  border-color: rgba(110, 255, 166, 0.5);
+  background: rgba(110, 255, 166, 0.10);
+  color: #6effa6;
+}
+
+/* Run-control buttons (Autonomous / With Approval / Approve / Reject). */
+#terrascout-ai-status-panel .ts-btn {
+  font-family: "Space Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.26rem 0.6rem;
+  border: 1px solid currentColor;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+}
+
+#terrascout-ai-status-panel .ts-btn:hover:not(:disabled) {
+  background: rgba(130, 227, 255, 0.15);
+  box-shadow: 0 0 8px 0 currentColor;
+}
+
+#terrascout-ai-status-panel .ts-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+#terrascout-ai-status-panel .ts-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+#terrascout-ai-status-panel .ts-btn-auto {
+  color: #6effa6;                 /* green = autonomous */
+}
+
+#terrascout-ai-status-panel .ts-btn-approval {
+  color: #ffd36f;                 /* amber = human-gated */
+}
+
+#terrascout-ai-status-panel .ts-btn-approve {
+  color: #6effa6;
+  animation: ts-pulse 1.5s ease-in-out infinite;
+}
+
+#terrascout-ai-status-panel .ts-btn-reject {
+  color: #ff8a8a;
+}
+
+#terrascout-ai-status-panel .ts-launch-note {
+  font-family: "Space Mono", monospace;
+  font-size: 0.64rem;
+  color: var(--text-muted);
+  margin-left: 0.4rem;
+}
+
+@media (max-width: 900px) {
+  #terrascout-ai-status-panel {
+    top: 0.5rem;
+    min-width: auto;
+    width: calc(100vw - 1rem);
+    padding: 0.45rem 0.6rem;
+  }
+}
+
+/* ─── TerraScout VLM Eye panel (top-right, below status panel) ─── */
+#terrascout-vlm-eye-panel {
+  position: fixed;
+  right: 1rem;
+  /* Slot well below the top-right Simulation Status panel. That panel packs
+     dataset status, teleport × 2, clouds, 400ft grid, playground buttons,
+     metrics, collision toggle, AND the Controls block (W/S, arrows, A/D,
+     C/G) — ~31rem tall on standard laptop viewports. Pinning VLM Eye to
+     top: 35rem guarantees a visible ~3rem breathing gap below the last
+     Controls line so the two panels never kiss. */
+  top: 35rem;
+  z-index: 11;
+  width: min(20rem, calc(100vw - 2rem));
+  padding: 0.7rem 0.8rem 0.75rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--bg-panel-border);
+  background: linear-gradient(165deg, var(--bg-panel), rgba(8, 16, 26, 0.42));
+  box-shadow: var(--shadow);
+  font-family: "Rajdhani", sans-serif;
+}
+
+#terrascout-vlm-eye-panel .ts-eye-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+#terrascout-vlm-eye-panel .ts-eye-brand {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+#terrascout-vlm-eye-panel .ts-eye-status {
+  font-family: "Space Mono", monospace;
+  font-size: 0.68rem;
+  color: #6effa6;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+#terrascout-vlm-eye-panel .ts-eye-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(130, 227, 255, 0.2);
+  overflow: hidden;
+}
+
+#terrascout-vlm-eye-panel .ts-eye-img,
+#terrascout-vlm-eye-panel .ts-eye-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#terrascout-vlm-eye-panel .ts-eye-canvas {
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+#terrascout-vlm-eye-panel .ts-eye-img {
+  object-fit: cover;
+}
+
+#terrascout-vlm-eye-panel .ts-eye-footnote {
+  margin-top: 0.4rem;
+  font-family: "Space Mono", monospace;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 900px) {
+  #terrascout-vlm-eye-panel {
+    display: none; /* hide on small screens to avoid HUD overlap */
+  }
+}
+
+/* ─── Field-status overlay panel (formerly incident overlay) ─── */
+/* Pinned to BOTTOM-LEFT (matches the FPV HUD / API console column width)
+   so it stops colliding with the right-side VLM Eye on shorter screens. */
+#incident-panel {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 10;
+  width: min(19rem, calc(100vw - 2rem));
+  padding: 0.85rem 1rem 0.95rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--bg-panel-border);
+  background: linear-gradient(165deg, var(--bg-panel), rgba(8, 16, 26, 0.42));
+  box-shadow: var(--shadow);
+  font-family: "Rajdhani", sans-serif;
+}
+
+#incident-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 0.5rem;
+}
+
+#incident-header .panel-title {
+  margin: 0;
+}
+
+#incident-arrow {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+#incident-body.collapsed > *:not(#incident-header) {
+  display: none;
+}
+
+#incident-info {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  margin-bottom: 0.55rem;
+}
+
+#incident-info strong {
+  color: var(--text-main);
+}
+
+.incident-callout {
+  display: grid;
+  grid-template-columns: 0.6rem 1fr;
+  align-items: center;
+  gap: 0.5rem 0.5rem;
+  padding: 0.45rem 0.55rem;
+  margin-bottom: 0.6rem;
+  border: 1px solid rgba(255, 90, 90, 0.4);
+  background: rgba(255, 90, 90, 0.08);
+  font-family: "Space Mono", monospace;
+  font-size: 0.78rem;
+  color: var(--text-main);
+}
+
+.incident-callout .callout-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px currentColor;
+  grid-row: span 2;
+}
+
+.incident-callout .callout-sub {
+  grid-column: 2;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+#incident-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.55rem;
+}
+
+.incident-tile {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  letter-spacing: 0.04em;
+}
+
+.incident-tile.top-anomaly {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+  box-shadow: 0 0 10px rgba(255, 90, 90, 0.65);
+}
+
+#incident-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem 0.7rem;
+  font-size: 0.72rem;
+  font-family: "Space Mono", monospace;
+  color: var(--text-muted);
+  margin-bottom: 0.55rem;
+}
+
+#incident-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+#incident-legend .legend-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 4px currentColor;
+}
+
+.incident-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.incident-actions .speed-btn {
+  flex: 1;
+}
+
+@media (max-width: 900px) {
+  #incident-panel {
+    left: 0.5rem;
+    bottom: 0.5rem;
+    right: auto;
+    width: min(18rem, calc(100vw - 1rem));
+  }
+}
+
+/* On shorter viewports the bottom-left column has to share space with the
+   API Test Console + throttle gauge, so collapse the field-info / grid /
+   legend sections and keep only the always-useful FLY TO B3 controls. */
+@media (max-height: 760px) {
+  #incident-info,
+  #incident-grid,
+  #incident-legend {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  #hud {
+    top: auto;
+    bottom: 4.9rem;
+    left: 0.5rem;
+    min-width: auto;
+    width: calc(100vw - 1rem);
+    padding: 0.7rem 0.78rem;
+  }
+
+  #api-test-panel {
+    top: auto;
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    bottom: 0.5rem;
+  }
+
+  #status-panel {
+    right: 0.5rem;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: auto;
+  }
+}

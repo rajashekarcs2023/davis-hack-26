@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TerraScout — UCD Field Drone Sim</title>
+  <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.117/Build/Cesium/Widgets/widgets.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.117/Build/Cesium/Cesium.js"></script>
+  <script type="module" src="/src/main.ts"></script>
+</head>
+
+<body>
+  <div id="cesiumContainer"></div>
+
+  <section id="hud">
+    <div class="hud-title">TerraScout FPV Drone</div>
+    <div class="hud-grid">
+      <div>Speed</div>
+      <div id="hud-speed">0.0 km/h</div>
+      <div>Altitude (AGL)</div>
+      <div id="hud-altitude-agl">0 ft</div>
+      <div>Altitude (MSL)</div>
+      <div id="hud-altitude-msl">0 ft</div>
+      <div>Bldg Collision</div>
+      <div id="hud-building-col">OFF</div>
+      <div>AGL Ceiling</div>
+      <div id="hud-agl-ceiling">ON</div>
+      <div>Air Density</div>
+      <div id="hud-density">1.225 kg/m³</div>
+      <div>Throttle</div>
+      <div id="hud-throttle">50%</div>
+    </div>
+  </section>
+
+  <section id="api-test-panel">
+    <div class="panel-title">API Test Console</div>
+    <p id="api-bridge-status">Bridge: idle</p>
+
+    <div class="api-row">
+      <span class="speed-tier-label">Action</span>
+      <select id="api-action-select" class="api-input">
+        <option value="forward">forward</option>
+        <option value="backward">backward</option>
+        <option value="left">left</option>
+        <option value="right">right</option>
+        <option value="ascend">ascend</option>
+        <option value="descend">descend</option>
+        <option value="rotate_cw">rotate_cw</option>
+        <option value="rotate_ccw">rotate_ccw</option>
+      </select>
+      <input id="api-magnitude-input" class="api-input" type="number" min="0" max="1" step="0.1" value="0.6" />
+      <button id="api-send-action-btn" class="speed-btn" type="button" style="max-width:72px;">Send</button>
+    </div>
+
+    <div class="api-row">
+      <button id="api-fetch-state-btn" class="speed-btn" type="button">Get State</button>
+      <input id="api-frame-fps" class="api-input" type="number" min="1" max="10" step="1" value="2" />
+      <button id="api-start-frames-btn" class="speed-btn" type="button">Frames On</button>
+      <button id="api-stop-frames-btn" class="speed-btn" type="button">Off</button>
+    </div>
+
+    <pre id="api-state-output">State output appears here.</pre>
+    <div id="api-frame-meta">Frame stream idle.</div>
+    <img id="api-frame-preview" alt="API frame preview" />
+  </section>
+
+  <!-- Throttle bar gauge -->
+  <div id="throttle-gauge">
+    <div class="tg-label">THR</div>
+    <div class="tg-track">
+      <div id="tg-hover-line" class="tg-hover-line"></div>
+      <div id="tg-fill" class="tg-fill"></div>
+    </div>
+    <div id="tg-percent" class="tg-percent">50%</div>
+  </div>
+
+  <section id="status-panel">
+    <div class="panel-title">Simulation Status</div>
+    <p id="dataset-status">Initializing high-fidelity world data...</p>
+    <p id="flight-status">Flight controls active.</p>
+    <div id="teleport-bar"
+      style="display: flex; align-items: center; gap: 0.35rem; margin-top: 0.4rem; margin-bottom: 0.35rem;">
+      <span class="speed-tier-label">Teleport</span>
+      <button id="teleport-ucd" class="speed-btn" type="button" style="padding: 0.32rem 0.5rem;">UC Davis</button>
+    </div>
+    <div id="teleport-custom-bar"
+      style="display:flex;align-items:center;gap:0.35rem;margin-top:0.4rem;margin-bottom:0.35rem;flex-wrap:wrap;">
+      <span class="speed-tier-label">Teleport</span>
+      <input id="teleport-input" type="text" placeholder="lat, lon  or  38.54, -121.76"
+        style="flex:1;min-width:160px;background:rgba(0,0,0,0.3);border:1px solid var(--bg-panel-border); color:var(--text-main);padding:0.28rem 0.5rem;font-family:'Space Mono',monospace;font-size:0.72rem;" />
+      <button id="teleport-custom-btn" class="speed-btn" type="button" style="padding:0.32rem 0.5rem;flex:0 0 auto;">Go</button>
+    </div>
+    <div id="cloud-toggle-bar"
+      style="display: flex; align-items: center; gap: 0.35rem; margin-top: 0.4rem; margin-bottom: 0.35rem;">
+      <span class="speed-tier-label">Clouds</span>
+      <button id="cloud-toggle-btn" class="speed-btn" type="button" style="padding: 0.32rem 0.5rem;">OFF</button>
+    </div>
+    <div id="agl-ceiling-bar"
+      style="display: flex; align-items: center; gap: 0.35rem; margin-top: 0.4rem; margin-bottom: 0.35rem;">
+      <span class="speed-tier-label">400ft Grid</span>
+      <button id="agl-ceiling-btn" class="speed-btn active" type="button" style="padding: 0.32rem 0.5rem;">ON</button>
+    </div>
+    <div id="playground-bar"
+      style="display: flex; align-items: center; gap: 0.35rem; margin-top: 0.4rem; margin-bottom: 0.35rem;">
+      <span class="speed-tier-label">Playground</span>
+      <button id="playground-none" class="speed-btn active" type="button" style="padding: 0.32rem 0.5rem;">Real
+        World</button>
+      <button id="playground-slalom" class="speed-btn" type="button" style="padding: 0.32rem 0.5rem;">Slalom</button>
+      <button id="playground-ring" class="speed-btn" type="button" style="padding: 0.32rem 0.5rem;">Ring</button>
+      <button id="playground-maze" class="speed-btn" type="button" style="padding: 0.32rem 0.5rem;">Maze</button>
+    </div>
+    <div id="metrics-bar" style="margin-top: 0.4rem; font-size: 0.85rem; color: #aaa;">
+      <span id="metrics-display">Collisions: 0 | Waypoints: 0/0 | Score: -</span>
+    </div>
+    <div id="collision-toggle" style="margin-top: 0.3rem; font-size: 0.8rem; color: #aaa;">
+      <label style="cursor: pointer; user-select: none;">
+        <input id="collision-box-toggle" type="checkbox" style="margin-right: 0.35rem;" />
+        Show drone collision box
+      </label>
+    </div>
+    <div class="controls">
+      <div class="controls-title">Controls</div>
+      <p><code>W</code> ascend | <code>S</code> descend</p>
+      <p><code>↑ ↓</code> forward / backward | <code>← →</code> yaw</p>
+      <p><code>A</code> strafe left | <code>D</code> strafe right</p>
+      <p><code>C</code> FPV camera | <code>G</code> creative mode</p>
+    </div>
+  </section>
+</body>
+
+</html>

@@ -1,0 +1,1394 @@
+[
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4002249,
+      "lat": 37.7995079,
+      "height": 0
+    },
+    "trunkHeight": 8.1,
+    "trunkRadius": 0.46,
+    "canopyRadius": 4.8,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4002117,
+      "lat": 37.7996966,
+      "height": 0
+    },
+    "trunkHeight": 9.9,
+    "trunkRadius": 0.53,
+    "canopyRadius": 5.2,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4002071,
+      "lat": 37.7998249,
+      "height": 0
+    },
+    "trunkHeight": 12.9,
+    "trunkRadius": 0.51,
+    "canopyRadius": 4.5,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4001789,
+      "lat": 37.7999104,
+      "height": 0
+    },
+    "trunkHeight": 10.9,
+    "trunkRadius": 0.53,
+    "canopyRadius": 3.8,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4001793,
+      "lat": 37.7999814,
+      "height": 0
+    },
+    "trunkHeight": 12,
+    "trunkRadius": 0.43,
+    "canopyRadius": 4.3,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4001904,
+      "lat": 37.8001947,
+      "height": 0
+    },
+    "trunkHeight": 10.6,
+    "trunkRadius": 0.49,
+    "canopyRadius": 4.3,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4002031,
+      "lat": 37.8004125,
+      "height": 0
+    },
+    "trunkHeight": 11.4,
+    "trunkRadius": 0.44,
+    "canopyRadius": 4.7,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4001963,
+      "lat": 37.8004761,
+      "height": 0
+    },
+    "trunkHeight": 9.7,
+    "trunkRadius": 0.58,
+    "canopyRadius": 4.2,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.40018,
+      "lat": 37.8005936,
+      "height": 0
+    },
+    "trunkHeight": 11.8,
+    "trunkRadius": 0.56,
+    "canopyRadius": 3.8,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4002117,
+      "lat": 37.8007225,
+      "height": 0
+    },
+    "trunkHeight": 10.6,
+    "trunkRadius": 0.4,
+    "canopyRadius": 4.5,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4001909,
+      "lat": 37.8007758,
+      "height": 0
+    },
+    "trunkHeight": 10.8,
+    "trunkRadius": 0.57,
+    "canopyRadius": 5.1,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4001074,
+      "lat": 37.8000226,
+      "height": 0
+    },
+    "trunkHeight": 12.9,
+    "trunkRadius": 0.46,
+    "canopyRadius": 5.3,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4000795,
+      "lat": 37.8000787,
+      "height": 0
+    },
+    "trunkHeight": 12.7,
+    "trunkRadius": 0.47,
+    "canopyRadius": 5.4,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4001025,
+      "lat": 37.8003897,
+      "height": 0
+    },
+    "trunkHeight": 10.7,
+    "trunkRadius": 0.56,
+    "canopyRadius": 4.3,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4001037,
+      "lat": 37.8004768,
+      "height": 0
+    },
+    "trunkHeight": 12.1,
+    "trunkRadius": 0.54,
+    "canopyRadius": 5,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4000885,
+      "lat": 37.800596,
+      "height": 0
+    },
+    "trunkHeight": 11.8,
+    "trunkRadius": 0.58,
+    "canopyRadius": 4.1,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4001203,
+      "lat": 37.8006897,
+      "height": 0
+    },
+    "trunkHeight": 12.3,
+    "trunkRadius": 0.49,
+    "canopyRadius": 4.1,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4000779,
+      "lat": 37.8007938,
+      "height": 0
+    },
+    "trunkHeight": 8.8,
+    "trunkRadius": 0.59,
+    "canopyRadius": 5.1,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4001036,
+      "lat": 37.800911,
+      "height": 0
+    },
+    "trunkHeight": 9.3,
+    "trunkRadius": 0.58,
+    "canopyRadius": 4.6,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999878,
+      "lat": 37.7995785,
+      "height": 0
+    },
+    "trunkHeight": 11.9,
+    "trunkRadius": 0.5,
+    "canopyRadius": 3.6,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4000231,
+      "lat": 37.7996822,
+      "height": 0
+    },
+    "trunkHeight": 11,
+    "trunkRadius": 0.58,
+    "canopyRadius": 4.4,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999776,
+      "lat": 37.7998142,
+      "height": 0
+    },
+    "trunkHeight": 12.7,
+    "trunkRadius": 0.57,
+    "canopyRadius": 3.7,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999767,
+      "lat": 37.7998862,
+      "height": 0
+    },
+    "trunkHeight": 8.3,
+    "trunkRadius": 0.47,
+    "canopyRadius": 5.1,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999759,
+      "lat": 37.8000857,
+      "height": 0
+    },
+    "trunkHeight": 10.9,
+    "trunkRadius": 0.57,
+    "canopyRadius": 5,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.4000201,
+      "lat": 37.8001984,
+      "height": 0
+    },
+    "trunkHeight": 8.6,
+    "trunkRadius": 0.48,
+    "canopyRadius": 3.7,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999783,
+      "lat": 37.800724,
+      "height": 0
+    },
+    "trunkHeight": 12.7,
+    "trunkRadius": 0.57,
+    "canopyRadius": 4.7,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999866,
+      "lat": 37.8008145,
+      "height": 0
+    },
+    "trunkHeight": 12.8,
+    "trunkRadius": 0.58,
+    "canopyRadius": 3.8,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999797,
+      "lat": 37.8009005,
+      "height": 0
+    },
+    "trunkHeight": 10.9,
+    "trunkRadius": 0.57,
+    "canopyRadius": 4.5,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3998989,
+      "lat": 37.7995016,
+      "height": 0
+    },
+    "trunkHeight": 9.1,
+    "trunkRadius": 0.59,
+    "canopyRadius": 4.5,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999092,
+      "lat": 37.7997074,
+      "height": 0
+    },
+    "trunkHeight": 10.6,
+    "trunkRadius": 0.43,
+    "canopyRadius": 5.2,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999244,
+      "lat": 37.7998127,
+      "height": 0
+    },
+    "trunkHeight": 10.3,
+    "trunkRadius": 0.44,
+    "canopyRadius": 3.9,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3998997,
+      "lat": 37.799916,
+      "height": 0
+    },
+    "trunkHeight": 8.3,
+    "trunkRadius": 0.42,
+    "canopyRadius": 5.3,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999172,
+      "lat": 37.7999807,
+      "height": 0
+    },
+    "trunkHeight": 11.6,
+    "trunkRadius": 0.42,
+    "canopyRadius": 3.7,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3998959,
+      "lat": 37.8003152,
+      "height": 0
+    },
+    "trunkHeight": 11.2,
+    "trunkRadius": 0.5,
+    "canopyRadius": 5.4,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3998954,
+      "lat": 37.8003767,
+      "height": 0
+    },
+    "trunkHeight": 12.5,
+    "trunkRadius": 0.58,
+    "canopyRadius": 4.4,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.39989,
+      "lat": 37.8006966,
+      "height": 0
+    },
+    "trunkHeight": 9.4,
+    "trunkRadius": 0.53,
+    "canopyRadius": 4.4,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999223,
+      "lat": 37.8007965,
+      "height": 0
+    },
+    "trunkHeight": 12.2,
+    "trunkRadius": 0.51,
+    "canopyRadius": 4.5,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3999091,
+      "lat": 37.8009099,
+      "height": 0
+    },
+    "trunkHeight": 11.9,
+    "trunkRadius": 0.52,
+    "canopyRadius": 4.8,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3997969,
+      "lat": 37.799513,
+      "height": 0
+    },
+    "trunkHeight": 12.2,
+    "trunkRadius": 0.6,
+    "canopyRadius": 4.2,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3997867,
+      "lat": 37.7995818,
+      "height": 0
+    },
+    "trunkHeight": 11.3,
+    "trunkRadius": 0.46,
+    "canopyRadius": 5.5,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3998048,
+      "lat": 37.7997205,
+      "height": 0
+    },
+    "trunkHeight": 10.1,
+    "trunkRadius": 0.57,
+    "canopyRadius": 5.2,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3998081,
+      "lat": 37.799978,
+      "height": 0
+    },
+    "trunkHeight": 8.9,
+    "trunkRadius": 0.56,
+    "canopyRadius": 4.5,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3997769,
+      "lat": 37.8000803,
+      "height": 0
+    },
+    "trunkHeight": 12,
+    "trunkRadius": 0.56,
+    "canopyRadius": 4.9,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3998126,
+      "lat": 37.8002029,
+      "height": 0
+    },
+    "trunkHeight": 11.8,
+    "trunkRadius": 0.49,
+    "canopyRadius": 5.1,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3998234,
+      "lat": 37.8003054,
+      "height": 0
+    },
+    "trunkHeight": 9.4,
+    "trunkRadius": 0.58,
+    "canopyRadius": 4.5,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3997905,
+      "lat": 37.8003859,
+      "height": 0
+    },
+    "trunkHeight": 9.5,
+    "trunkRadius": 0.52,
+    "canopyRadius": 4.1,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3998093,
+      "lat": 37.8008141,
+      "height": 0
+    },
+    "trunkHeight": 12.7,
+    "trunkRadius": 0.49,
+    "canopyRadius": 4.7,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3996761,
+      "lat": 37.7995069,
+      "height": 0
+    },
+    "trunkHeight": 10.3,
+    "trunkRadius": 0.43,
+    "canopyRadius": 3.6,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3996831,
+      "lat": 37.7996197,
+      "height": 0
+    },
+    "trunkHeight": 12.8,
+    "trunkRadius": 0.5,
+    "canopyRadius": 4.6,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3996815,
+      "lat": 37.7999957,
+      "height": 0
+    },
+    "trunkHeight": 12.3,
+    "trunkRadius": 0.56,
+    "canopyRadius": 4.7,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3996872,
+      "lat": 37.80012,
+      "height": 0
+    },
+    "trunkHeight": 10.8,
+    "trunkRadius": 0.55,
+    "canopyRadius": 4.4,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3997158,
+      "lat": 37.8003168,
+      "height": 0
+    },
+    "trunkHeight": 12.3,
+    "trunkRadius": 0.53,
+    "canopyRadius": 4.7,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3996898,
+      "lat": 37.8003828,
+      "height": 0
+    },
+    "trunkHeight": 11.1,
+    "trunkRadius": 0.43,
+    "canopyRadius": 5.2,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3996996,
+      "lat": 37.8004793,
+      "height": 0
+    },
+    "trunkHeight": 12.8,
+    "trunkRadius": 0.59,
+    "canopyRadius": 5.3,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.399718,
+      "lat": 37.8006117,
+      "height": 0
+    },
+    "trunkHeight": 8.3,
+    "trunkRadius": 0.42,
+    "canopyRadius": 5,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3996985,
+      "lat": 37.8007016,
+      "height": 0
+    },
+    "trunkHeight": 10.3,
+    "trunkRadius": 0.49,
+    "canopyRadius": 4.4,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3997123,
+      "lat": 37.8007977,
+      "height": 0
+    },
+    "trunkHeight": 10.7,
+    "trunkRadius": 0.43,
+    "canopyRadius": 4.8,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.399708,
+      "lat": 37.8008877,
+      "height": 0
+    },
+    "trunkHeight": 12.6,
+    "trunkRadius": 0.55,
+    "canopyRadius": 5.2,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3996039,
+      "lat": 37.7996062,
+      "height": 0
+    },
+    "trunkHeight": 11.6,
+    "trunkRadius": 0.5,
+    "canopyRadius": 5.5,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995775,
+      "lat": 37.7996839,
+      "height": 0
+    },
+    "trunkHeight": 8.9,
+    "trunkRadius": 0.49,
+    "canopyRadius": 4.6,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3996022,
+      "lat": 37.7998174,
+      "height": 0
+    },
+    "trunkHeight": 10.1,
+    "trunkRadius": 0.55,
+    "canopyRadius": 4.5,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995771,
+      "lat": 37.7998979,
+      "height": 0
+    },
+    "trunkHeight": 8.5,
+    "trunkRadius": 0.55,
+    "canopyRadius": 3.8,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995839,
+      "lat": 37.7999923,
+      "height": 0
+    },
+    "trunkHeight": 12.6,
+    "trunkRadius": 0.59,
+    "canopyRadius": 4.2,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995877,
+      "lat": 37.8000791,
+      "height": 0
+    },
+    "trunkHeight": 11.4,
+    "trunkRadius": 0.47,
+    "canopyRadius": 4.4,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995972,
+      "lat": 37.800284,
+      "height": 0
+    },
+    "trunkHeight": 11.2,
+    "trunkRadius": 0.51,
+    "canopyRadius": 5.2,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3996092,
+      "lat": 37.8003956,
+      "height": 0
+    },
+    "trunkHeight": 12.3,
+    "trunkRadius": 0.59,
+    "canopyRadius": 4.9,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995807,
+      "lat": 37.8004911,
+      "height": 0
+    },
+    "trunkHeight": 10.2,
+    "trunkRadius": 0.5,
+    "canopyRadius": 5.3,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995903,
+      "lat": 37.8005822,
+      "height": 0
+    },
+    "trunkHeight": 11,
+    "trunkRadius": 0.49,
+    "canopyRadius": 5.2,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3994776,
+      "lat": 37.7995235,
+      "height": 0
+    },
+    "trunkHeight": 9.1,
+    "trunkRadius": 0.56,
+    "canopyRadius": 4.2,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.399482,
+      "lat": 37.7995762,
+      "height": 0
+    },
+    "trunkHeight": 12.4,
+    "trunkRadius": 0.42,
+    "canopyRadius": 5.3,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3994812,
+      "lat": 37.7998107,
+      "height": 0
+    },
+    "trunkHeight": 9.9,
+    "trunkRadius": 0.45,
+    "canopyRadius": 3.8,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995219,
+      "lat": 37.7999071,
+      "height": 0
+    },
+    "trunkHeight": 10.2,
+    "trunkRadius": 0.58,
+    "canopyRadius": 4.4,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995085,
+      "lat": 37.7999979,
+      "height": 0
+    },
+    "trunkHeight": 9.1,
+    "trunkRadius": 0.57,
+    "canopyRadius": 4.4,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3994915,
+      "lat": 37.8003193,
+      "height": 0
+    },
+    "trunkHeight": 12.6,
+    "trunkRadius": 0.57,
+    "canopyRadius": 3.9,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3994928,
+      "lat": 37.8003752,
+      "height": 0
+    },
+    "trunkHeight": 9,
+    "trunkRadius": 0.4,
+    "canopyRadius": 3.8,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995095,
+      "lat": 37.8005239,
+      "height": 0
+    },
+    "trunkHeight": 9.1,
+    "trunkRadius": 0.51,
+    "canopyRadius": 4,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995216,
+      "lat": 37.800787,
+      "height": 0
+    },
+    "trunkHeight": 12.7,
+    "trunkRadius": 0.55,
+    "canopyRadius": 5.2,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3995044,
+      "lat": 37.800886,
+      "height": 0
+    },
+    "trunkHeight": 9.5,
+    "trunkRadius": 0.58,
+    "canopyRadius": 4.7,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993917,
+      "lat": 37.7995084,
+      "height": 0
+    },
+    "trunkHeight": 9.1,
+    "trunkRadius": 0.52,
+    "canopyRadius": 5.1,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3994242,
+      "lat": 37.7996148,
+      "height": 0
+    },
+    "trunkHeight": 9.2,
+    "trunkRadius": 0.5,
+    "canopyRadius": 5.3,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993769,
+      "lat": 37.7996818,
+      "height": 0
+    },
+    "trunkHeight": 9.4,
+    "trunkRadius": 0.41,
+    "canopyRadius": 5.3,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993832,
+      "lat": 37.7998138,
+      "height": 0
+    },
+    "trunkHeight": 12.8,
+    "trunkRadius": 0.48,
+    "canopyRadius": 4.3,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993896,
+      "lat": 37.799885,
+      "height": 0
+    },
+    "trunkHeight": 11.8,
+    "trunkRadius": 0.51,
+    "canopyRadius": 4,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.399409,
+      "lat": 37.8001216,
+      "height": 0
+    },
+    "trunkHeight": 10.1,
+    "trunkRadius": 0.55,
+    "canopyRadius": 4.4,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3994227,
+      "lat": 37.800284,
+      "height": 0
+    },
+    "trunkHeight": 9.3,
+    "trunkRadius": 0.43,
+    "canopyRadius": 5.4,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3994156,
+      "lat": 37.800393,
+      "height": 0
+    },
+    "trunkHeight": 9.4,
+    "trunkRadius": 0.44,
+    "canopyRadius": 4.6,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993876,
+      "lat": 37.800524,
+      "height": 0
+    },
+    "trunkHeight": 12.6,
+    "trunkRadius": 0.59,
+    "canopyRadius": 3.7,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993867,
+      "lat": 37.8006144,
+      "height": 0
+    },
+    "trunkHeight": 12.7,
+    "trunkRadius": 0.51,
+    "canopyRadius": 3.6,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3994097,
+      "lat": 37.8006772,
+      "height": 0
+    },
+    "trunkHeight": 10.5,
+    "trunkRadius": 0.56,
+    "canopyRadius": 5.1,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3994088,
+      "lat": 37.8008096,
+      "height": 0
+    },
+    "trunkHeight": 9.4,
+    "trunkRadius": 0.46,
+    "canopyRadius": 5.3,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.399283,
+      "lat": 37.7994893,
+      "height": 0
+    },
+    "trunkHeight": 12.3,
+    "trunkRadius": 0.44,
+    "canopyRadius": 4.8,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993165,
+      "lat": 37.799597,
+      "height": 0
+    },
+    "trunkHeight": 9.4,
+    "trunkRadius": 0.46,
+    "canopyRadius": 4.9,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993011,
+      "lat": 37.7997146,
+      "height": 0
+    },
+    "trunkHeight": 9.4,
+    "trunkRadius": 0.58,
+    "canopyRadius": 4.6,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993158,
+      "lat": 37.7999135,
+      "height": 0
+    },
+    "trunkHeight": 13,
+    "trunkRadius": 0.41,
+    "canopyRadius": 4.7,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993121,
+      "lat": 37.7999918,
+      "height": 0
+    },
+    "trunkHeight": 12.5,
+    "trunkRadius": 0.49,
+    "canopyRadius": 3.6,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993189,
+      "lat": 37.8001893,
+      "height": 0
+    },
+    "trunkHeight": 12.1,
+    "trunkRadius": 0.46,
+    "canopyRadius": 4.7,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3992836,
+      "lat": 37.8002997,
+      "height": 0
+    },
+    "trunkHeight": 9.2,
+    "trunkRadius": 0.4,
+    "canopyRadius": 4.3,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3992992,
+      "lat": 37.8007927,
+      "height": 0
+    },
+    "trunkHeight": 10,
+    "trunkRadius": 0.59,
+    "canopyRadius": 4.3,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3993144,
+      "lat": 37.8008904,
+      "height": 0
+    },
+    "trunkHeight": 9.2,
+    "trunkRadius": 0.55,
+    "canopyRadius": 4.9,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3991953,
+      "lat": 37.7994947,
+      "height": 0
+    },
+    "trunkHeight": 9.3,
+    "trunkRadius": 0.42,
+    "canopyRadius": 3.5,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.399179,
+      "lat": 37.7998788,
+      "height": 0
+    },
+    "trunkHeight": 9,
+    "trunkRadius": 0.58,
+    "canopyRadius": 3.7,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3991828,
+      "lat": 37.8000202,
+      "height": 0
+    },
+    "trunkHeight": 11.2,
+    "trunkRadius": 0.51,
+    "canopyRadius": 5.4,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3992109,
+      "lat": 37.8002888,
+      "height": 0
+    },
+    "trunkHeight": 11,
+    "trunkRadius": 0.54,
+    "canopyRadius": 3.8,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3992229,
+      "lat": 37.8004144,
+      "height": 0
+    },
+    "trunkHeight": 9.4,
+    "trunkRadius": 0.6,
+    "canopyRadius": 4.9,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3991772,
+      "lat": 37.8005225,
+      "height": 0
+    },
+    "trunkHeight": 8.3,
+    "trunkRadius": 0.42,
+    "canopyRadius": 4.2,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3991833,
+      "lat": 37.800814,
+      "height": 0
+    },
+    "trunkHeight": 8.5,
+    "trunkRadius": 0.58,
+    "canopyRadius": 5.1,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3991779,
+      "lat": 37.8008972,
+      "height": 0
+    },
+    "trunkHeight": 8.5,
+    "trunkRadius": 0.6,
+    "canopyRadius": 4.1,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3990969,
+      "lat": 37.7995055,
+      "height": 0
+    },
+    "trunkHeight": 12.5,
+    "trunkRadius": 0.55,
+    "canopyRadius": 5,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3990947,
+      "lat": 37.7996144,
+      "height": 0
+    },
+    "trunkHeight": 8.3,
+    "trunkRadius": 0.54,
+    "canopyRadius": 3.7,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3991179,
+      "lat": 37.7996771,
+      "height": 0
+    },
+    "trunkHeight": 10.6,
+    "trunkRadius": 0.48,
+    "canopyRadius": 4.7,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3990783,
+      "lat": 37.7998799,
+      "height": 0
+    },
+    "trunkHeight": 9.5,
+    "trunkRadius": 0.51,
+    "canopyRadius": 3.9,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3990807,
+      "lat": 37.7999858,
+      "height": 0
+    },
+    "trunkHeight": 11,
+    "trunkRadius": 0.53,
+    "canopyRadius": 3.8,
+    "variant": "oak"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3991065,
+      "lat": 37.8002102,
+      "height": 0
+    },
+    "trunkHeight": 12.2,
+    "trunkRadius": 0.51,
+    "canopyRadius": 5.1,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3991243,
+      "lat": 37.8004056,
+      "height": 0
+    },
+    "trunkHeight": 12,
+    "trunkRadius": 0.46,
+    "canopyRadius": 4.9,
+    "variant": "pine"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3990832,
+      "lat": 37.8007117,
+      "height": 0
+    },
+    "trunkHeight": 9.1,
+    "trunkRadius": 0.43,
+    "canopyRadius": 4.3,
+    "variant": "cypress"
+  },
+  {
+    "type": "tree",
+    "position": {
+      "lon": -122.3990943,
+      "lat": 37.8008916,
+      "height": 0
+    },
+    "trunkHeight": 8.6,
+    "trunkRadius": 0.47,
+    "canopyRadius": 3.9,
+    "variant": "pine"
+  }
+]
