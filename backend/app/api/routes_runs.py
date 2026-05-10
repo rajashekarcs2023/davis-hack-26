@@ -41,6 +41,65 @@ async def list_runs(limit: int = 50) -> list[RunSummary]:
     return await RunStore.get().list_runs(limit=limit)
 
 
+# Lightweight, sim-friendly view of "what is the agent doing right now?"
+# Both the drone sim HUD and the robot sim HUD poll this every ~750ms so they
+# can render a live status badge + action-token chip stream alongside the
+# existing simulator UI. Designed to be safe to call when no run is active.
+@router.get("/api/runs/active")
+async def get_active_run() -> dict:
+    runs = await RunStore.get().list_runs(limit=20)
+    active_states = {
+        RunStatus.PENDING,
+        RunStatus.PLANNING,
+        RunStatus.AWAITING_APPROVAL,
+        RunStatus.EXECUTING,
+    }
+    for run in runs:
+        if run.status in active_states:
+            tool_chips: list[dict] = []
+            for tc in (run.tool_calls or [])[-6:]:
+                tool_chips.append(
+                    {
+                        "name": tc.get("tool") or tc.get("name") or "tool",
+                        "summary": tc.get("summary") or tc.get("result_summary"),
+                        "ok": tc.get("ok", True),
+                    }
+                )
+            actions: list[dict] = []
+            if run.plan is not None:
+                for a in run.plan.drone_path_hint or []:
+                    actions.append({"kind": "drone", "action": a.action, "magnitude": a.magnitude})
+                for a in run.plan.robot_path_hint or []:
+                    actions.append({"kind": "robot", "action": a.action, "magnitude": a.magnitude})
+            evidence_points: list[dict] = []
+            for src_name, src in (("aerial", run.aerial_analysis), ("ground", run.ground_analysis)):
+                if src is not None:
+                    for ep in src.evidence_points or []:
+                        evidence_points.append(
+                            {
+                                "source": src_name,
+                                "point": ep.point,
+                                "label": ep.label,
+                            }
+                        )
+            return {
+                "active": True,
+                "run_id": run.run_id,
+                "zone_id": run.zone_id,
+                "status": run.status.value,
+                "outcome": run.outcome.value if run.outcome else None,
+                "tool_chips": tool_chips,
+                "actions": actions[-8:],
+                "evidence_points": evidence_points[-12:],
+            }
+    return {
+        "active": False,
+        "tool_chips": [],
+        "actions": [],
+        "evidence_points": [],
+    }
+
+
 @router.get("/api/runs/{run_id}", response_model=RunSummary)
 async def get_run(run_id: str) -> RunSummary:
     run = await RunStore.get().get_run(run_id)
