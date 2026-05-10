@@ -12,13 +12,13 @@ import logging
 from typing import Protocol
 
 from app.config import settings
-from app.schemas import AerialAnalysis, GroundAnalysis, Zone
+from app.schemas import AerialAnalysis, ErPolicyStep, GroundAnalysis, LeafEvidence, Zone
 
 logger = logging.getLogger("terrascout.vision")
 
 
 class VLMClient(Protocol):
-    """Both methods take an already-base64-encoded JPEG (no data:url prefix)."""
+    """All analyze_* methods take an already-base64-encoded JPEG (no data:url prefix)."""
 
     name: str
 
@@ -33,6 +33,21 @@ class VLMClient(Protocol):
         frame_b64: str,
         zone: Zone,
     ) -> GroundAnalysis: ...
+
+    async def analyze_leaf(
+        self,
+        frame_b64: str,
+        zone: Zone,
+        mode: str,  # "affected_plant" | "healthy_reference"
+    ) -> LeafEvidence: ...
+
+    async def analyze_er_policy(
+        self,
+        frame_b64: str,
+        zone: Zone,
+        goal: str,
+        current_pose: dict[str, float],  # current joint angles for spatial context
+    ) -> ErPolicyStep: ...
 
 
 _client: VLMClient | None = None
@@ -75,6 +90,28 @@ def get_vlm_client() -> VLMClient:
             return _client
         except Exception as exc:
             logger.warning("Claude Vision unavailable (%s); falling back to mock", exc)
+
+    if choice in {"ollama", "ollama_gemma", "ollama_gemma3", "ollama_gemma4"}:
+        try:
+            from app.vision.ollama_gemma import OllamaGemmaClient
+
+            _client = OllamaGemmaClient()
+            logger.info(
+                "VLM client: Ollama %s (open-source, local)", _client.model_id
+            )
+            return _client
+        except Exception as exc:
+            logger.warning("Ollama Gemma unavailable (%s); falling back to mock", exc)
+
+    if choice in {"ensemble", "multi", "ensemble_vlm"}:
+        try:
+            from app.vision.ensemble_vlm import EnsembleVlmClient
+
+            _client = EnsembleVlmClient()
+            logger.info("VLM client: Ensemble (parallel multi-model)")
+            return _client
+        except Exception as exc:
+            logger.warning("Ensemble VLM unavailable (%s); falling back to mock", exc)
 
     # Default + ultimate fallback.
     from app.vision.mock_vlm import MockVLMClient
