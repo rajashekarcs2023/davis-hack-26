@@ -104,11 +104,23 @@ async def _claude_run(ctx: RunContext, summary: RunSummary, zone) -> RunSummary:
             },
             indent=2,
         ),
+        zone_id=zone.zone_id,
     )
 
     messages: list[dict[str, Any]] = [{"role": "user", "content": initial_user}]
     turn = 0
     work_order = None
+
+    # Alias live mutation buffers onto the summary BEFORE the first tool fires
+    # so /api/runs/active sees tool chips and safety rejections accumulate as
+    # the agent runs, not just at completion. RunStore holds the same summary
+    # reference so live mutations propagate without re-upsert.
+    summary.tool_calls = ctx.tool_log
+    summary.safety_rejections = ctx.safety_rejections
+    # AgriScout pivot: surface risk + diagnostic bundle on the summary the
+    # frontend polls. Aliased so the polling endpoint sees belief snapshots,
+    # leaf evidence, and probe readings accumulate as each tool fires.
+    summary.diagnostic_bundle = ctx.bundle
 
     while turn < settings.agent_max_tool_calls:
         turn += 1
@@ -134,6 +146,13 @@ async def _claude_run(ctx: RunContext, summary: RunSummary, zone) -> RunSummary:
                 args.setdefault("run_id", ctx.run_id)
                 summary.status = RunStatus.AWAITING_APPROVAL
             result_str = await execute_tool(tool, args, ctx)
+            # Refresh derived single-object fields so the polling endpoint
+            # sees the latest plan / aerial / ground analysis mid-run.
+            summary.plan = ctx.plan
+            summary.aerial_analysis = ctx.aerial
+            summary.ground_analysis = ctx.ground
+            summary.risk_assessment = ctx.risk
+            # Diagnostic bundle is already aliased; this line is defensive.
             tool_results.append(
                 {"type": "tool_result", "tool_use_id": block.id, "content": result_str}
             )
@@ -145,11 +164,14 @@ async def _claude_run(ctx: RunContext, summary: RunSummary, zone) -> RunSummary:
         if work_order is not None:
             break
 
+    # Defensive final assignment (no-op if aliases above held).
     summary.tool_calls = ctx.tool_log
     summary.safety_rejections = ctx.safety_rejections
     summary.aerial_analysis = ctx.aerial
     summary.ground_analysis = ctx.ground
     summary.plan = ctx.plan
+    summary.risk_assessment = ctx.risk
+    summary.diagnostic_bundle = ctx.bundle
 
     if work_order is not None:
         from app.schemas import WorkOrder
@@ -176,6 +198,9 @@ async def _scripted_run(ctx: RunContext, summary: RunSummary, zone) -> RunSummar
     Useful for offline dev, CI, and demo-day insurance.
     """
     cls = classify_zone(zone)
+    # AgriScout multi-cause framing: even when classification points at
+    # irrigation, we phrase the plan as "hotspot detected; cause TBD" so the
+    # diagnostic routine has a reason to run.
     plan = InspectionPlan(
         zone_id=zone.zone_id,
         likely_issue=cls.label.value.replace("_", " "),
@@ -186,9 +211,20 @@ async def _scripted_run(ctx: RunContext, summary: RunSummary, zone) -> RunSummar
     )
     ctx.plan = plan
     summary.plan = plan
+    # Alias the live mutation buffers onto the summary so /api/runs/active
+    # sees tool firings, safety rejections, and the inspection plan as they
+    # happen. The RunStore holds a reference to this same summary object so
+    # any append to ctx.tool_log shows up in the next poll without a re-upsert.
+    summary.tool_calls = ctx.tool_log
+    summary.safety_rejections = ctx.safety_rejections
+    summary.diagnostic_bundle = ctx.bundle
     summary.status = RunStatus.EXECUTING
 
+    # AgriScout canonical happy path. Approval gate moves to AFTER aerial VLM:
+    # the drone is passive observation (no approval needed), the ground robot
+    # is active dispatch (approval required, but scripted run auto-skips it).
     seq: list[tuple[str, dict[str, Any]]] = [
+        ("fetch_risk_signal", {"zone_id": zone.zone_id}),
         ("fetch_anomaly", {"zone_id": zone.zone_id}),
         (
             "draft_inspection_plan",
@@ -206,10 +242,27 @@ async def _scripted_run(ctx: RunContext, summary: RunSummary, zone) -> RunSummar
 
     for tool, args in seq:
         await execute_tool(tool, args, ctx)
+        # Refresh derived single-object fields after each tool so the polling
+        # endpoint sees the up-to-date plan / risk / aerial analysis mid-run.
+        summary.plan = ctx.plan
+        summary.aerial_analysis = ctx.aerial
+        summary.risk_assessment = ctx.risk
 
+    # Diagnostic phase. We always run the four diagnostic tools because the
+    # whole story depends on the multi-step routine landing.
     if ctx.aerial and ctx.aerial.recommend_ground_truth:
-        await execute_tool("dispatch_ground_robot", {"zone_id": zone.zone_id}, ctx)
-        await execute_tool("vlm_analyze_ground", {"zone_id": zone.zone_id}, ctx)
+        diag_seq: list[tuple[str, dict[str, Any]]] = [
+            ("dispatch_ground_robot", {"zone_id": zone.zone_id}),
+            ("vlm_analyze_ground", {"zone_id": zone.zone_id}),
+            ("inspect_leaf_with_wrist", {"zone_id": zone.zone_id}),
+            ("compare_healthy_plant", {"zone_id": zone.zone_id}),
+            ("probe_soil_moisture", {"zone_id": zone.zone_id}),
+            ("place_pest_marker", {"zone_id": zone.zone_id}),
+        ]
+        for tool, args in diag_seq:
+            await execute_tool(tool, args, ctx)
+            summary.plan = ctx.plan
+            summary.ground_analysis = ctx.ground
 
     final = await execute_tool(
         "create_work_order",
@@ -225,10 +278,14 @@ async def _scripted_run(ctx: RunContext, summary: RunSummary, zone) -> RunSummar
 
     from app.schemas import WorkOrder
 
+    # tool_calls and safety_rejections were already aliased at run start;
+    # these final assignments are defensive (no-ops if the alias holds).
     summary.tool_calls = ctx.tool_log
     summary.safety_rejections = ctx.safety_rejections
     summary.aerial_analysis = ctx.aerial
     summary.ground_analysis = ctx.ground
+    summary.risk_assessment = ctx.risk
+    summary.diagnostic_bundle = ctx.bundle
     summary.work_order = WorkOrder(**work_order) if work_order else None
     summary.status = RunStatus.COMPLETED
     summary.outcome = (
