@@ -1,5 +1,5 @@
 import { AlertTriangle, ArrowUpRight, Droplets } from "lucide-react";
-import type { FieldPlaceholder } from "../data/placeholder";
+import type { FieldPlaceholder } from "../../../data/placeholder";
 
 export type AnomalyCardVariant = "monitor" | "assessment";
 

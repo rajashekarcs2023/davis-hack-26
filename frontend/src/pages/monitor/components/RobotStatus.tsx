@@ -1,5 +1,5 @@
 import { Bot, Navigation } from "lucide-react";
-import type { FieldPlaceholder } from "../data/placeholder";
+import type { FieldPlaceholder } from "../../../data/placeholder";
 
 type RobotStatusProps = {
   data: FieldPlaceholder;
