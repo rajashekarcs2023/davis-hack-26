@@ -1,10 +1,22 @@
-"""Claude tool-use loop using the Anthropic Messages API.
+"""Anthropic Claude fallback orchestrator.
 
-Why Messages API directly and not the Agent SDK?
+This module is the SECONDARY backend kept around while the primary Google
+ADK + Gemini 2.5 Pro brain in `app.agent.adk_orchestrator` stabilises out of
+preview. It binds to the same tool surface (`app.agent.tools`) and the same
+prompts (`app.agent.prompts`), so the two backends are drop-in interchangeable
+at the FastAPI route layer.
+
+When is the fallback used?
+    - `GOOGLE_API_KEY` (or `GEMINI_API_KEY`) is not set.
+    - The `google-adk` package is not installed in the current environment.
+    - A demo run needs deterministic Anthropic Messages-API behaviour to
+      reproduce a previously-recorded trace.
+
+Why the raw Messages API instead of the Anthropic Agent SDK?
     - Fewer moving parts at hackathon time.
     - The tool-use surface is identical; the SDK is a thin wrapper that adds
-      session management we don't need yet.
-    - We can swap in `claude-agent-sdk` later without changing tools.py at all.
+      session management we don't need at this layer.
+    - We can swap in `claude-agent-sdk` later without touching `tools.py`.
 
 The loop:
     1. POST messages with system prompt + initial user task + tool schemas.
@@ -36,7 +48,7 @@ from app.schemas import (
     RunSummary,
 )
 
-logger = logging.getLogger("agriscout.agent")
+logger = logging.getLogger("agriscout.agent.claude")
 
 
 def _new_run_id() -> str:
