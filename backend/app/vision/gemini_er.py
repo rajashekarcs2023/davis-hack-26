@@ -31,9 +31,18 @@ from typing import Any
 from app.config import settings
 from app.domain.packs.irrigation import (
     AERIAL_VLM_PROMPT_TEMPLATE,
+    ER_POLICY_PROMPT_TEMPLATE,
     GROUND_VLM_PROMPT_TEMPLATE,
+    LEAF_VLM_PROMPT_TEMPLATE,
 )
-from app.schemas import AerialAnalysis, EvidencePoint, GroundAnalysis, Zone
+from app.schemas import (
+    AerialAnalysis,
+    ErPolicyStep,
+    EvidencePoint,
+    GroundAnalysis,
+    LeafEvidence,
+    Zone,
+)
 
 logger = logging.getLogger("terrascout.vision.gemini")
 
@@ -134,6 +143,78 @@ class _GeminiBase:
             evidence_points=_coerce_points(data.get("evidence_points") or []),
             confidence=float(data.get("confidence", 0.0) or 0.0),
         )
+
+    async def analyze_leaf(
+        self,
+        frame_b64: str,
+        zone: Zone,
+        mode: str,
+    ) -> LeafEvidence:
+        """Close-up leaf VLM pass for inspect_leaf_with_wrist /
+        compare_healthy_plant. Same _ask_json plumbing as aerial/ground,
+        just with the leaf-specific prompt + schema."""
+        prompt = LEAF_VLM_PROMPT_TEMPLATE.format(zone_id=zone.zone_id, mode=mode)
+        raw = await self._ask_json(prompt, frame_b64, thinking_budget=GROUND_THINKING_BUDGET)
+        data = raw if isinstance(raw, dict) else {}
+        return LeafEvidence(
+            stippling=bool(data.get("stippling", False)),
+            webbing=bool(data.get("webbing", False)),
+            egg_masses=bool(data.get("egg_masses", False)),
+            discoloration=bool(data.get("discoloration", False)),
+            other=[str(e) for e in (data.get("other") or [])][:6],
+            confidence=float(data.get("confidence", 0.0) or 0.0),
+            evidence_points=_coerce_points(data.get("evidence_points") or []),
+        )
+
+    async def analyze_er_policy(
+        self,
+        frame_b64: str,
+        zone: Zone,
+        goal: str,
+        current_pose: dict[str, float],
+    ) -> ErPolicyStep:
+        """Gemini Robotics-ER's native capability: embodied-reasoning policy.
+
+        The model sees the current wrist-cam frame + a short pose summary +
+        the goal and emits a target_point ([y, x] normalized 0..1000), a
+        self-reported status (navigating/arrived/lost), and a one-sentence
+        reasoning. That's the signal our closed-loop translator converts
+        into SO101 joint tokens.
+
+        Uses AERIAL_THINKING_BUDGET (0) for latency — this method is called
+        in a tight loop so even 200ms of "thinking" adds up. The model is
+        well-suited to spatial pointing without extra deliberation.
+        """
+        pose_summary = ", ".join(
+            f"{k}={v:.0f}" for k, v in sorted(current_pose.items())
+        ) or "unknown"
+        prompt = ER_POLICY_PROMPT_TEMPLATE.format(
+            zone_id=zone.zone_id,
+            pose_summary=pose_summary,
+            goal=goal,
+        )
+        raw = await self._ask_json(prompt, frame_b64, thinking_budget=AERIAL_THINKING_BUDGET)
+        data = raw if isinstance(raw, dict) else {}
+
+        # Coerce the target_point safely. Tolerate list/tuple, clamp to
+        # 0..1000, default to [500, 500] (centered, no-op) on malformed.
+        raw_pt = data.get("target_point") or [500, 500]
+        tp: list[int] = [500, 500]
+        if isinstance(raw_pt, (list, tuple)) and len(raw_pt) == 2:
+            try:
+                y = max(0, min(1000, int(raw_pt[0])))
+                x = max(0, min(1000, int(raw_pt[1])))
+                tp = [y, x]
+            except (TypeError, ValueError):
+                tp = [500, 500]
+
+        status = str(data.get("status") or "navigating").lower()
+        if status not in ("navigating", "arrived", "lost"):
+            status = "navigating"
+
+        reasoning = str(data.get("reasoning") or "")[:200]
+
+        return ErPolicyStep(target_point=tp, status=status, reasoning=reasoning)
 
 
 def _coerce_points(items: list[Any]) -> list[EvidencePoint]:
