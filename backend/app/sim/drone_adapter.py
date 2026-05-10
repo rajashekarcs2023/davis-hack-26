@@ -74,6 +74,29 @@ class DroneAdapter:
             logger.warning("drone /action failed: %s", exc)
             return False
 
+    async def reset_to_launchpad(self) -> bool:
+        """Teleport the drone back to the spawn launch pad (~8 m AGL).
+
+        Used at the start of dispatch_drone_to_zone so every run begins
+        with the drone grounded, which guarantees a visible takeoff beat
+        regardless of where the previous run left it. The reset is an
+        instantaneous teleport (no physical motion), then we sleep
+        briefly so the new state propagates back through the WS state
+        push before the planner reads altAgl.
+
+        Returns True if the reset was acknowledged, False otherwise. We
+        DON'T raise on failure — the dispatch will still work, the
+        takeoff beat just won't be as dramatic.
+        """
+        ok = await self.post_action_raw("reset", 0.0)
+        if not ok:
+            logger.info("drone reset_to_launchpad failed — continuing anyway")
+            return False
+        # Wait for the WS state push (every 100ms) to deliver the new
+        # post-teleport altAgl. Two pushes is enough to be safe.
+        await asyncio.sleep(0.3)
+        return True
+
     # --- safe dispatch ---
 
     async def dispatch(
@@ -120,11 +143,29 @@ class DroneAdapter:
         self,
         target_lat: float,
         target_lon: float,
-        target_alt_agl: float = 25.0,
+        target_alt_agl: float = 22.0,
     ) -> list[DroneAction]:
         """Build a safe action sequence to get the drone to a lat/lon at a target AGL.
 
         Heuristic, not a real motion planner. Good enough for a 4×4 field demo.
+
+        Mission profile (always in this order):
+          1. TAKEOFF      — ascend from current altitude to CRUISE_ALT_AGL
+                            (~50 m). On a fresh page load the drone spawns
+                            at 8 m AGL so this is a clear, punchy liftoff;
+                            on subsequent runs (drone already up) it's a
+                            no-op or short trim ascent.
+          2. HEADING      — rotate to face the target zone if off-bearing.
+          3. CRUISE       — forward chunks until ~over the zone.
+          4. INSPECT      — descend from cruise alt to target_alt_agl
+                            (default 22 m AGL) for the close vantage.
+          5. SCAN         — left-then-right lateral strafe so the drone
+                            reads as "scanning the zone" instead of just
+                            hovering.
+
+        All within the safety envelope: AGL stays in [8 m, 80 m] so the
+        guard never trips. Magnitudes are tuned just under cap for big,
+        readable motion (0.85-0.95).
         """
         state = await self.get_state()
         if state.lat is None or state.lon is None:
@@ -132,13 +173,35 @@ class DroneAdapter:
             logger.warning("drone state unavailable; emitting hover plan")
             return [DroneAction(action="ascend", magnitude=0.1)]
 
-        # 1. heading correction
+        # Cruise altitude where the forward traverse happens. Below the
+        # 80 m safety ceiling, well above the 8 m floor.
+        CRUISE_ALT_AGL = 50.0
+        ALT_MAG = 0.95
+        ALT_M_PER_CHUNK = 14.0  # `ascend|descend 1.0` ≈ 14 m vertical
+        FORWARD_MAG = 0.85
+        FORWARD_M_PER_CHUNK = 18.0
+
+        plan: list[DroneAction] = []
+        cur_alt = state.altAgl or 0.0
+
+        # 1. TAKEOFF — climb from current altitude to cruise. On a fresh
+        #    page load (cur_alt ≈ 8 m) this is 3 ascend chunks ≈ 42 m of
+        #    visible vertical travel; on subsequent runs (cur_alt ≈ 22 m
+        #    after the previous descend) it's 2 chunks. Either way the
+        #    dispatch starts with a clear "rising up" beat that reads as
+        #    a takeoff.
+        takeoff_delta = CRUISE_ALT_AGL - cur_alt
+        if takeoff_delta > 5.0:
+            takeoff_chunks = max(1, int(round(takeoff_delta / ALT_M_PER_CHUNK)))
+            for _ in range(takeoff_chunks):
+                plan.append(DroneAction(action="ascend", magnitude=ALT_MAG))
+
+        # 2. HEADING — rotate to face the target zone (only if meaningfully off-bearing).
         bearing_deg = _bearing(state.lat, state.lon, target_lat, target_lon)
         heading = state.heading or 0.0
         delta = ((bearing_deg - heading + 540.0) % 360.0) - 180.0  # signed [-180,180]
-        plan: list[DroneAction] = []
         if abs(delta) > 5.0:
-            magnitude = min(0.6, abs(delta) / 180.0)  # 1.0 ~= 90deg per spec
+            magnitude = min(0.65, abs(delta) / 180.0)  # 1.0 ~= 90deg per spec
             plan.append(
                 DroneAction(
                     action="rotate_cw" if delta > 0 else "rotate_ccw",
@@ -146,24 +209,34 @@ class DroneAdapter:
                 )
             )
 
-        # 2. forward in chunks
+        # 3. CRUISE — forward chunks until ~over the zone. Distance-scaled
+        #    so the drone visibly traverses most of the route. With
+        #    `forward 0.85` (1.7 s key-hold) it clears ~18 m per chunk;
+        #    capped at 4 chunks (72 m) to leave budget for inspect + scan.
         dist_m = _haversine_m(state.lat, state.lon, target_lat, target_lon)
-        # Empirically, magnitude 0.5 forward ~ ~10m horizontal. Coarse but bounded.
-        chunks = min(6, max(1, int(round(dist_m / 12.0))))
-        for _ in range(chunks):
-            plan.append(DroneAction(action="forward", magnitude=0.45))
+        forward_chunks = max(1, int(round(dist_m / FORWARD_M_PER_CHUNK)))
+        forward_chunks = min(4, forward_chunks)
+        for _ in range(forward_chunks):
+            plan.append(DroneAction(action="forward", magnitude=FORWARD_MAG))
 
-        # 3. altitude correction toward target
-        cur_alt = state.altAgl or 0.0
-        alt_delta = target_alt_agl - cur_alt
-        if abs(alt_delta) > 3.0:
-            mag = min(0.5, abs(alt_delta) / 30.0)
-            plan.append(
-                DroneAction(
-                    action="descend" if alt_delta < 0 else "ascend",
-                    magnitude=round(mag, 2),
-                )
-            )
+        # 4. INSPECT descent — drop from cruise to target_alt_agl for the
+        #    close vantage. Big punchy chunks so the descent reads on
+        #    camera as "coming down for a closer look".
+        inspect_delta = target_alt_agl - CRUISE_ALT_AGL  # negative
+        if abs(inspect_delta) > 3.0:
+            inspect_chunks = max(1, int(round(abs(inspect_delta) / ALT_M_PER_CHUNK)))
+            direction = "descend" if inspect_delta < 0 else "ascend"
+            for _ in range(inspect_chunks):
+                plan.append(DroneAction(action=direction, magnitude=0.9))
+
+        # 5. SCAN flourish — punchy left-then-right strafe at 0.85
+        #    magnitude (~16 m each direction) so the drone visibly
+        #    "scans" the inspection zone. Both `left` and `right` are in
+        #    the drone whitelist (see safety.py).
+        if settings.safety_max_actions_per_dispatch - len(plan) >= 2:
+            plan.append(DroneAction(action="left", magnitude=0.85))
+            plan.append(DroneAction(action="right", magnitude=0.85))
+
         return plan
 
 
