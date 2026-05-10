@@ -4,8 +4,6 @@
 
 TerraScout is a satellite-guided, agentic field-triage system for crop water stress. A Claude agent reads satellite NDVI anomalies, dispatches a DAC drone for aerial verification, optionally dispatches a LeKiwi ground robot for close-up ground-truthing, and produces a farmer-approved work order — with a Gemini Robotics-ER vision model providing embodied reasoning over the drone and robot camera frames.
 
-Tracks targeted: **Best Use of DAC Materials**, **Best AI/ML Hack**, **Most Technically Challenging**, **Best UI/UX**.
-
 ## Repo layout
 
 ```
