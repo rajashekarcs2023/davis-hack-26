@@ -32,6 +32,12 @@ ALLOWED_DRONE_ACTIONS: frozenset[str] = frozenset(
         "descend",
         "rotate_cw",
         "rotate_ccw",
+        # Special: teleports the drone back to the spawn launch pad (~8 m AGL).
+        # Used at the start of dispatch_drone_to_zone so every run begins with
+        # the drone grounded — this guarantees the takeoff beat is visible
+        # regardless of where the previous run left it. No physical traversal,
+        # so it bypasses the AGL ceiling/floor checks below.
+        "reset",
     }
 )
 
