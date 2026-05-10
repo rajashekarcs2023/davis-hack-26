@@ -3,9 +3,17 @@ import { ChevronLeft, Package } from "lucide-react";
 import { FIELD_PLACEHOLDER } from "./data/placeholder";
 import { AnomalyCard } from "./components/AnomalyCard";
 import { AnomalyDashboard } from "./components/AnomalyDashboard";
+import {
+  AiReasoningPanel,
+  AssessmentFieldTitle,
+  AssessmentMetadataGrid,
+  HumanInTheLoopPanel,
+  NdviAnomalyPanel,
+} from "./components/AssessmentAiPanels";
 import { AnalyticsScreen } from "./components/AnalyticsScreen";
 import { AppHeader } from "./components/AppHeader";
 import { BottomNav, type NavTab } from "./components/BottomNav";
+import { GroundTruthVerificationScreen } from "./components/GroundTruthVerificationScreen";
 import { MapRoadDivider } from "./components/MapRoadDivider";
 import { WeatherBar } from "./components/WeatherBar";
 import { WorkOrder } from "./components/WorkOrder";
@@ -37,9 +45,9 @@ function OrdersSummary() {
 
 export default function App() {
   const [tab, setTab] = useState<NavTab>("monitor");
-  const [monitorScreen, setMonitorScreen] = useState<"map" | "assessment">(
-    "map"
-  );
+  const [monitorScreen, setMonitorScreen] = useState<
+    "map" | "assessment" | "groundTruth"
+  >("map");
   const data = FIELD_PLACEHOLDER;
 
   function handleNav(next: NavTab) {
@@ -64,7 +72,7 @@ export default function App() {
                   onReviewAssessment={() => setMonitorScreen("assessment")}
                 />
               </>
-            ) : (
+            ) : monitorScreen === "assessment" ? (
               <>
                 <button
                   type="button"
@@ -74,11 +82,27 @@ export default function App() {
                   <ChevronLeft className="h-4 w-4" />
                   Map
                 </button>
+                <AssessmentFieldTitle data={data} />
                 <WeatherBar />
-                <AnomalyDashboard activeZoneLabel={data.zone} />
-                <MapRoadDivider />
-                <AnomalyCard variant="assessment" data={data} />
+                <div className="space-y-4">
+                  <NdviAnomalyPanel data={data} />
+                  <AiReasoningPanel data={data} />
+                  <HumanInTheLoopPanel
+                    onProceed={() => setMonitorScreen("groundTruth")}
+                    onIgnore={() => setMonitorScreen("map")}
+                  />
+                  <AssessmentMetadataGrid data={data} />
+                </div>
               </>
+            ) : (
+              <GroundTruthVerificationScreen
+                zoneLabel={data.zone}
+                onBack={() => setMonitorScreen("assessment")}
+                onGenerateWorkOrder={() => {
+                  setTab("orders");
+                  setMonitorScreen("map");
+                }}
+              />
             )}
           </div>
         ) : null}

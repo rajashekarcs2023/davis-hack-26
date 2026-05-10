@@ -44,3 +44,16 @@ body {
 .animate-status-dot {
   animation: terrascout-pulse-dot 1.6s ease-in-out infinite;
 }
+
+@keyframes ground-truth-progress-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.ground-truth-progress-indeterminate {
+  animation: ground-truth-progress-slide 1.4s ease-in-out infinite;
+}
