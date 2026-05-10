@@ -19,6 +19,7 @@ from app.api import (
     routes_health,
     routes_metrics,
     routes_plan,
+    routes_risk,
     routes_runs,
     routes_sim,
 )
@@ -66,6 +67,7 @@ if settings.enable_cors:
 # Routes
 app.include_router(routes_health.router)
 app.include_router(routes_anomaly.router)
+app.include_router(routes_risk.router)
 app.include_router(routes_plan.router)
 app.include_router(routes_execute.router)
 app.include_router(routes_approval.router)
