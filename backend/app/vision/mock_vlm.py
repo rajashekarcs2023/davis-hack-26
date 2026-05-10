@@ -12,7 +12,15 @@ is identical regardless of which VLM produced the analysis.
 
 from __future__ import annotations
 
-from app.schemas import AerialAnalysis, AnomalyPattern, EvidencePoint, GroundAnalysis, Zone
+from app.schemas import (
+    AerialAnalysis,
+    AnomalyPattern,
+    ErPolicyStep,
+    EvidencePoint,
+    GroundAnalysis,
+    LeafEvidence,
+    Zone,
+)
 
 
 def _pt(y: int, x: int, label: str) -> EvidencePoint:
@@ -107,4 +115,129 @@ class MockVLMClient:
             other_evidence=["mild stress visible"],
             evidence_points=[_pt(500, 500, "stress")] if score >= 0.5 else [],
             confidence=0.65,
+        )
+
+    async def analyze_leaf(
+        self,
+        frame_b64: str,  # noqa: ARG002
+        zone: Zone,
+        mode: str,
+    ) -> LeafEvidence:
+        """Deterministic leaf-inspection fixture used on demo-day fallback.
+
+        The demo story (per `final.md`): affected plant in zone B3 shows
+        strong pest signatures (stippling + webbing); other zones show weaker,
+        ambiguous evidence. Healthy-reference scans always come back clean —
+        that's the differential signal the agent uses to tip belief toward a
+        localized pest hotspot vs a field-wide stress.
+        """
+        if mode == "healthy_reference":
+            return LeafEvidence(
+                stippling=False,
+                webbing=False,
+                egg_masses=False,
+                discoloration=False,
+                other=["healthy reference plant; no pest signatures"],
+                confidence=0.78,
+                evidence_points=[],
+            )
+
+        # "affected_plant" path — zone-dependent so the demo arc is reproducible.
+        is_demo_hotspot = zone.zone_id == "B3"
+        if is_demo_hotspot:
+            return LeafEvidence(
+                stippling=True,
+                webbing=True,
+                egg_masses=False,
+                discoloration=True,
+                other=[
+                    "fine pin-prick stippling on upper leaf surface",
+                    "silk webbing along midrib",
+                ],
+                confidence=0.81,
+                evidence_points=[
+                    _pt(420, 510, "stippling"),
+                    _pt(610, 480, "webbing"),
+                ],
+            )
+        # Non-demo zones: weaker, ambiguous leaf evidence so the belief
+        # doesn't confidently tip toward pest.
+        return LeafEvidence(
+            stippling=False,
+            webbing=False,
+            egg_masses=False,
+            discoloration=False,
+            other=["mild leaf curl; cause indeterminate"],
+            confidence=0.45,
+            evidence_points=[],
+        )
+
+    async def analyze_er_policy(
+        self,
+        frame_b64: str,  # noqa: ARG002
+        zone: Zone,
+        goal: str,  # noqa: ARG002
+        current_pose: dict[str, float],
+    ) -> ErPolicyStep:
+        """Deterministic ER-style embodied-reasoning fixture.
+
+        Simulates a VLA policy pointing the wrist cam toward the leaf
+        hotspot. Convergence heuristic uses `Wrist_Pitch` as the progress
+        signal — that's the joint the translator actually advances each
+        iteration (each mid-phase target emits `wrist_down`). Progression:
+
+            start (Wrist_Pitch > -30): big reach-down, target [800, 510]
+                                        → wrist_down(0.5) + shoulder_down(0.3)
+            mid   (-60 < Wrist ≤ -30):  fine-tune, target [620, 510]
+                                        → wrist_down(0.4)
+            done  (Wrist_Pitch ≤ -60):  status = "arrived"
+
+        With the real-sim translator behavior (~45° per magnitude*90°), the
+        loop converges in 2-3 iterations on B3.
+
+        Y targets are >500 so they drive DOWNWARD wrist motion in the
+        translator (affected leaf is below the robot's forward gaze).
+        """
+        wrist_pitch = current_pose.get("Wrist_Pitch", 0.0)
+        is_demo = zone.zone_id == "B3"
+
+        # --- Arrived: wrist cam aimed down far enough to see the leaf
+        if wrist_pitch <= -60.0:
+            return ErPolicyStep(
+                target_point=[500, 500],  # centered — no further movement
+                status="arrived",
+                reasoning=(
+                    "Wrist cam now aimed at affected leaf — pest signatures "
+                    "visible in the view. Ready for close-range VLM."
+                    if is_demo
+                    else "Arm positioned over zone centre; no obvious cues."
+                ),
+            )
+
+        # --- Mid: wrist partly tilted, fine-tune toward leaf
+        if wrist_pitch < -30.0:
+            target = [620, 510] if is_demo else [580, 500]
+            return ErPolicyStep(
+                target_point=target,
+                status="navigating",
+                reasoning=(
+                    "Leaf visible in lower half of frame; final small "
+                    "wrist-down adjustment to centre on the stippling pattern."
+                    if is_demo
+                    else "Centring on the zone; one more small adjustment."
+                ),
+            )
+
+        # --- Start: wrist near-neutral, need a larger downward push
+        target = [800, 510] if is_demo else [700, 500]
+        return ErPolicyStep(
+            target_point=target,
+            status="navigating",
+            reasoning=(
+                "Affected leaf is in the plant row below current gaze; need "
+                "to tilt shoulder down and aim wrist cam toward the lower "
+                "part of the frame."
+                if is_demo
+                else "Scanning zone from above; need to reach down into the row."
+            ),
         )
