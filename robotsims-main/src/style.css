@@ -1,0 +1,305 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: #0a0a0a;
+  color: #e0e0e0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#sim-root {
+  width: 100%;
+  height: 100%;
+}
+
+#hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.panel {
+  position: absolute;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #333;
+  color: #e0e0e0;
+  padding: 10px;
+  min-width: 220px;
+}
+
+#left-panel {
+  top: 12px;
+  left: 12px;
+}
+
+#api-test-panel {
+  top: 230px;
+  left: 12px;
+  min-width: 240px;
+}
+
+#right-panel {
+  top: 12px;
+  right: 12px;
+}
+
+.section-title {
+  color: #666;
+  margin: 0 0 6px;
+  font-size: 0.68rem;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+button {
+  border: 1px solid #444;
+  background: #121212;
+  color: #aaa;
+  padding: 4px 7px;
+  font: inherit;
+  cursor: pointer;
+}
+
+button.active {
+  color: #ffffff;
+  background: #2a2a2a;
+  border: 1px solid #666;
+}
+
+button:hover {
+  color: #f0f0f0;
+}
+
+#bridge-status {
+  margin-top: 8px;
+}
+
+#bridge-status.connected {
+  color: #7fe08a;
+}
+
+#joint-readout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.telemetry-line {
+  margin: 4px 0;
+  color: #e0e0e0;
+}
+
+.telemetry-value {
+  color: #999;
+}
+
+.api-test-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.api-test-row label {
+  color: #999;
+  min-width: 56px;
+}
+
+#api-action-select {
+  flex: 1;
+  border: 1px solid #444;
+  background: #121212;
+  color: #ddd;
+  font: inherit;
+  padding: 4px;
+}
+
+#api-magnitude {
+  width: 120px;
+}
+
+#api-magnitude-value {
+  color: #bbb;
+  min-width: 34px;
+  text-align: right;
+}
+
+#api-test-status {
+  color: #9ad0ff;
+  margin-top: 2px;
+}
+
+#wrist-panel {
+  position: absolute;
+  /* Bottom-right corner so the wrist-cam PIP doesn't sit on top of the demo
+     target (stress patch directly in front of the robot in the main view). */
+  right: 16px;
+  bottom: 16px;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #333;
+  color: #e0e0e0;
+  padding: 8px;
+  text-align: center;
+}
+
+#wrist-cam {
+  width: 256px;
+  height: 256px;
+  border: 1px solid #333;
+  image-rendering: pixelated;
+  background: #000;
+}
+
+#fps-counter {
+  margin-top: 6px;
+  color: #666;
+}
+
+/* ─── TerraScout AI live status panel (top-center) ─── */
+#terrascout-ai-status-panel {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 11;
+  pointer-events: auto;
+  min-width: 30rem;
+  max-width: min(46rem, calc(100vw - 24px));
+  padding: 8px 12px 10px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #333;
+  color: #e0e0e0;
+  font-family: 'Space Mono', monospace;
+}
+
+#terrascout-ai-status-panel .ts-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 3px 0;
+}
+
+#terrascout-ai-status-panel .ts-brand {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #82e3ff;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  padding-right: 6px;
+  border-right: 1px solid rgba(130, 227, 255, 0.25);
+  margin-right: 3px;
+}
+
+#terrascout-ai-status-panel .ts-status {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border: 1px solid currentColor;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+#terrascout-ai-status-panel .ts-status.idle      { color: #7a8da8; }
+#terrascout-ai-status-panel .ts-status.pending   { color: #9ad0ff; }
+#terrascout-ai-status-panel .ts-status.planning  { color: #82e3ff; }
+#terrascout-ai-status-panel .ts-status.await     { color: #ffd36f; animation: ts-pulse 1.5s ease-in-out infinite; }
+#terrascout-ai-status-panel .ts-status.exec      { color: #6effa6; animation: ts-pulse 1.0s ease-in-out infinite; }
+#terrascout-ai-status-panel .ts-status.ok        { color: #6effa6; }
+#terrascout-ai-status-panel .ts-status.reject    { color: #ff8a8a; }
+
+@keyframes ts-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
+  50%      { box-shadow: 0 0 6px 0 currentColor; opacity: 0.75; }
+}
+
+#terrascout-ai-status-panel .ts-zone {
+  font-size: 0.74rem;
+  color: #e0e0e0;
+}
+
+#terrascout-ai-status-panel .ts-row-label {
+  font-size: 0.6rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  min-width: 5.5rem;
+}
+
+#terrascout-ai-status-panel .ts-chip {
+  font-size: 0.64rem;
+  padding: 2px 7px;
+  border: 1px solid rgba(130, 227, 255, 0.35);
+  background: rgba(130, 227, 255, 0.08);
+  color: #e0e0e0;
+  white-space: nowrap;
+}
+
+#terrascout-ai-status-panel .ts-chip-ghost {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  color: #888;
+  font-style: italic;
+}
+
+#terrascout-ai-status-panel .ts-chip-tool {
+  border-color: rgba(130, 227, 255, 0.5);
+  background: rgba(130, 227, 255, 0.12);
+  color: #a8e9ff;
+}
+
+#terrascout-ai-status-panel .ts-chip-tool.fail {
+  border-color: rgba(255, 138, 138, 0.7);
+  background: rgba(255, 138, 138, 0.12);
+  color: #ff8a8a;
+}
+
+#terrascout-ai-status-panel .ts-chip-drone {
+  border-color: rgba(255, 211, 111, 0.55);
+  background: rgba(255, 211, 111, 0.10);
+  color: #ffd36f;
+}
+
+#terrascout-ai-status-panel .ts-chip-robot {
+  border-color: rgba(110, 255, 166, 0.5);
+  background: rgba(110, 255, 166, 0.10);
+  color: #6effa6;
+}
+
+/* ─── VLM evidence overlay (stacks on top of #wrist-cam) ─── */
+#terrascout-evidence-overlay {
+  /* canvas; positioning is set inline by the script so it lines up with
+     the rendered wrist-cam canvas pixel-for-pixel */
+  z-index: 12;
+}
+
+#terrascout-evidence-badge {
+  margin-top: 6px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ff5a5a;
+  text-transform: uppercase;
+  animation: ts-pulse 1.0s ease-in-out infinite;
+}
