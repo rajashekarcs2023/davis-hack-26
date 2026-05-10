@@ -14,7 +14,7 @@ from typing import Protocol
 from app.config import settings
 from app.schemas import AerialAnalysis, ErPolicyStep, GroundAnalysis, LeafEvidence, Zone
 
-logger = logging.getLogger("terrascout.vision")
+logger = logging.getLogger("agriscout.vision")
 
 
 class VLMClient(Protocol):

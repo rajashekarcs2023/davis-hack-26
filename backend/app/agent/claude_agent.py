@@ -36,7 +36,7 @@ from app.schemas import (
     RunSummary,
 )
 
-logger = logging.getLogger("terrascout.agent")
+logger = logging.getLogger("agriscout.agent")
 
 
 def _new_run_id() -> str:

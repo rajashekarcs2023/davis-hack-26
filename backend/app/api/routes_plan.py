@@ -14,7 +14,7 @@ from app.agent.claude_agent import run_agent
 from app.domain.anomaly_engine import annotate_grid, classify_zone, load_field_grid
 from app.schemas import InspectionPlan, RunSummary
 
-logger = logging.getLogger("terrascout.api.plan")
+logger = logging.getLogger("agriscout.api.plan")
 
 router = APIRouter()
 

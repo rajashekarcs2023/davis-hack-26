@@ -1,7 +1,7 @@
 [project]
-name = "terrascout-backend"
+name = "agriscout-backend"
 version = "0.1.0"
-description = "TerraScout AI backend — agentic field-triage over DAC drone + robot sims."
+description = "AgriScout AI backend — agentic field-triage over DAC drone + robot sims."
 readme = "README.md"
 requires-python = ">=3.11"
 

@@ -63,7 +63,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-terrascout-bg pb-28">
+    <div className="min-h-screen bg-agriscout-bg pb-28">
       <div className="mx-auto max-w-md px-4 pt-4">
         {tab === "today" ? <TodayPage onScanZone={handleScanZone} /> : null}
         {tab === "monitor" ? (

@@ -44,7 +44,7 @@ from app.schemas import (
     Zone,
 )
 
-logger = logging.getLogger("terrascout.vision.gemini")
+logger = logging.getLogger("agriscout.vision.gemini")
 
 ROBOTICS_ER_MODEL = "gemini-robotics-er-1.6-preview"
 PRO_VISION_MODEL = "gemini-2.5-pro"

@@ -40,7 +40,7 @@ from app.sim.safety import DispatchBudget
 from app.vision import get_vlm_client
 from app.vision.mock_vlm import MockVLMClient
 
-logger = logging.getLogger("terrascout.api.execute")
+logger = logging.getLogger("agriscout.api.execute")
 
 router = APIRouter()
 

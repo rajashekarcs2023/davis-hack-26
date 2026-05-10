@@ -1,3 +1,3 @@
-"""TerraScout backend package."""
+"""AgriScout backend package."""
 
 __version__ = "0.1.0"

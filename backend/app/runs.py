@@ -15,7 +15,7 @@ from collections import OrderedDict
 from app.config import RUNS_DIR
 from app.schemas import RunStatus, RunSummary
 
-logger = logging.getLogger("terrascout.runs")
+logger = logging.getLogger("agriscout.runs")
 
 
 class RunStore:

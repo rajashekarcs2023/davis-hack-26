@@ -11,19 +11,19 @@ type OrdersPageProps = {
 function OrdersSummary() {
   return (
     <div className="grid grid-cols-3 gap-2">
-      <div className="rounded-xl border border-white/10 border-l-4 border-l-orange-500 bg-terrascout-card p-3">
+      <div className="rounded-xl border border-white/10 border-l-4 border-l-orange-500 bg-agriscout-card p-3">
         <p className="text-[10px] font-semibold uppercase tracking-wide text-white/45">
           Active
         </p>
         <p className="mt-1 text-2xl font-bold text-orange-400">2</p>
       </div>
-      <div className="rounded-xl border border-white/10 border-l-4 border-l-emerald-500 bg-terrascout-card p-3">
+      <div className="rounded-xl border border-white/10 border-l-4 border-l-emerald-500 bg-agriscout-card p-3">
         <p className="text-[10px] font-semibold uppercase tracking-wide text-white/45">
           Resolved
         </p>
         <p className="mt-1 text-2xl font-bold text-emerald-400">1</p>
       </div>
-      <div className="rounded-xl border border-white/10 bg-terrascout-card p-3">
+      <div className="rounded-xl border border-white/10 bg-agriscout-card p-3">
         <p className="text-[10px] font-semibold uppercase tracking-wide text-white/45">
           Total
         </p>

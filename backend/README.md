@@ -1,8 +1,8 @@
-# TerraScout Backend
+# AgriScout Backend
 
-FastAPI service that orchestrates the TerraScout agentic loop: anomaly detection → Claude agent → Gemini VLM → DAC drone + LeKiwi robot → farmer-approved work order.
+FastAPI service that orchestrates the AgriScout agentic loop: anomaly detection → Google ADK agent (Gemini 2.5 Pro) → Gemini Robotics-ER + Gemma 4 VLM ensemble → DAC drone + LeKiwi/SO101 robot → farmer-approved work order.
 
-See `../projectplan/architecture.md` for the full design. This README covers how to run it.
+See the top-level `README.md` for the product overview. This README covers how to run the backend.
 
 ## Prereqs
 
@@ -17,7 +17,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env
-# fill in ANTHROPIC_API_KEY / GOOGLE_API_KEY when you have them
+# fill in GEMINI_API_KEY (and optionally OLLAMA_HOST for the local Gemma 4 fallback)
 ```
 
 `VLM_CLIENT=mock` in `.env` lets you run the full loop without LLM API keys — useful for first-day setup and demo-day insurance.
@@ -107,14 +107,11 @@ backend/
 │   ├── config.py              # env vars + safety bounds
 │   ├── schemas.py             # Pydantic models
 │   ├── api/                   # REST + SSE endpoints
-│   ├── agent/                 # Claude Agent SDK orchestration + tools + prompts
-│   ├── vision/                # VLM client interface + Gemini + Mock
+│   ├── agent/                 # Google ADK orchestration (Gemini 2.5 Pro) + tools + ER policy translator
+│   ├── vision/                # VLM clients: Gemini Robotics-ER 1.6 + Gemma 4 (Ollama) + cross-validated ensemble
 │   ├── sim/                   # drone + robot HTTP adapters + safety guard
 │   ├── domain/                # anomaly engine, work-order templater, packs
 │   └── data/                  # field grid, eval set, run logs
 └── scripts/                   # smoke tests + dataset generator + e2e demo
 ```
 
-## Architecture decisions
-
-See `../projectplan/DECISIONS.md`. Anything labelled `decided` shouldn't be changed without an entry there.

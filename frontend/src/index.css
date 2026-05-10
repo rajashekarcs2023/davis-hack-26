@@ -7,10 +7,10 @@ html {
 }
 
 body {
-  @apply bg-terrascout-bg text-white antialiased;
+  @apply bg-agriscout-bg text-white antialiased;
 }
 
-@keyframes terrascout-pulse-dot {
+@keyframes agriscout-pulse-dot {
   0%,
   100% {
     opacity: 1;
@@ -22,7 +22,7 @@ body {
   }
 }
 
-@keyframes terrascout-robot-move {
+@keyframes agriscout-robot-move {
   0% {
     left: 12%;
     top: 58%;
@@ -38,11 +38,11 @@ body {
 }
 
 .animate-robot-path {
-  animation: terrascout-robot-move 4s ease-in-out infinite alternate;
+  animation: agriscout-robot-move 4s ease-in-out infinite alternate;
 }
 
 .animate-status-dot {
-  animation: terrascout-pulse-dot 1.6s ease-in-out infinite;
+  animation: agriscout-pulse-dot 1.6s ease-in-out infinite;
 }
 
 @keyframes ground-truth-progress-slide {

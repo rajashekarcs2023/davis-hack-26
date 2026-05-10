@@ -1,9 +1,7 @@
 # DAC sim repos — clone separately, not part of our repo
 
-drone-sim-main/
 projectplan/
 docs/
-robotsims-main/
 brainstorm.md   
 EXECUTION_PLAN.md
 final.md

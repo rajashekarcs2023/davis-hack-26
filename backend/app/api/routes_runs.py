@@ -12,7 +12,7 @@ from app.agent.claude_agent import run_agent
 from app.runs import RunStore
 from app.schemas import RunStatus, RunSummary
 
-logger = logging.getLogger("terrascout.api.runs")
+logger = logging.getLogger("agriscout.api.runs")
 
 router = APIRouter()
 

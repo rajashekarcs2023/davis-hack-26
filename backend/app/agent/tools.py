@@ -43,7 +43,7 @@ from app.sim.safety import DispatchBudget
 from app.vision import get_vlm_client
 from app.vision.mock_vlm import MockVLMClient
 
-logger = logging.getLogger("terrascout.agent.tools")
+logger = logging.getLogger("agriscout.agent.tools")
 
 
 # ---------------------------------------------------------------------------

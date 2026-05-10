@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        terrascout: {
+        agriscout: {
           bg: "#0a1210",
           surface: "#121b18",
           card: "#111c18",

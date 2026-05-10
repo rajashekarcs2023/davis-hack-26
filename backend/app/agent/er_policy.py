@@ -46,7 +46,7 @@ from typing import Any, Protocol
 
 from app.schemas import RobotAction, Zone
 
-logger = logging.getLogger("terrascout.er_policy")
+logger = logging.getLogger("agriscout.er_policy")
 
 
 # Frame-space constants. Matches the 0..1000 normalized coordinate system

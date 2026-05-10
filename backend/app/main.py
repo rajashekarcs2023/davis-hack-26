@@ -30,7 +30,7 @@ logging.basicConfig(
     level=settings.log_level.upper(),
     format="%(asctime)s %(levelname)-7s %(name)s :: %(message)s",
 )
-logger = logging.getLogger("terrascout")
+logger = logging.getLogger("agriscout")
 
 
 @asynccontextmanager
@@ -49,7 +49,7 @@ async def lifespan(app: FastAPI):  # noqa: ARG001
 
 
 app = FastAPI(
-    title="TerraScout AI Backend",
+    title="AgriScout AI Backend",
     description="Agentic field-triage over DAC drone + robot sims.",
     version="0.1.0",
     lifespan=lifespan,
@@ -79,7 +79,7 @@ app.include_router(routes_sim.router)
 @app.get("/")
 def root() -> dict:
     return {
-        "service": "TerraScout AI Backend",
+        "service": "AgriScout AI Backend",
         "docs": "/docs",
         "health": "/api/health",
     }

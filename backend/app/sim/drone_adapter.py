@@ -24,7 +24,7 @@ from app.config import settings
 from app.schemas import DroneAction, DroneState
 from app.sim.safety import DispatchBudget, SimKind, review_action
 
-logger = logging.getLogger("terrascout.sim.drone")
+logger = logging.getLogger("agriscout.sim.drone")
 
 
 @dataclass

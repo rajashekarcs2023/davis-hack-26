@@ -27,7 +27,7 @@ function StatRow({
   body: ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-terrascout-card p-4">
+    <div className="rounded-2xl border border-white/10 bg-agriscout-card p-4">
       <div className="flex gap-3">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-500/25">
           <Icon className="h-5 w-5" />
@@ -80,7 +80,7 @@ export function AnalyticsScreen() {
 
       <section>
         <h3 className="mb-3 text-sm font-bold text-white">This week&apos;s activity</h3>
-        <div className="rounded-2xl border border-white/10 bg-terrascout-card p-4">
+        <div className="rounded-2xl border border-white/10 bg-agriscout-card p-4">
           <div className="space-y-4">
             {WEEK.map((row) => (
               <div key={row.day}>
@@ -106,7 +106,7 @@ export function AnalyticsScreen() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-white/10 bg-terrascout-card p-4">
+      <section className="rounded-2xl border border-white/10 bg-agriscout-card p-4">
         <h3 className="text-sm font-bold text-white">What this means for you</h3>
         <ul className="mt-3 space-y-2.5 text-sm leading-relaxed text-white/75">
           <li className="flex gap-2">
@@ -135,7 +135,7 @@ export function AnalyticsScreen() {
         </ul>
       </section>
 
-      <section className="rounded-2xl border border-white/10 bg-terrascout-card p-4">
+      <section className="rounded-2xl border border-white/10 bg-agriscout-card p-4">
         <h3 className="text-sm font-bold text-white">System information</h3>
         <ul className="mt-3 space-y-2 text-xs leading-relaxed text-emerald-100/45">
           <li>Powered by AI vision technology</li>

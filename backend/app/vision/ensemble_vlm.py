@@ -33,7 +33,7 @@ from app.schemas import (
     Zone,
 )
 
-logger = logging.getLogger("terrascout.vision.ensemble")
+logger = logging.getLogger("agriscout.vision.ensemble")
 
 
 class _Member:

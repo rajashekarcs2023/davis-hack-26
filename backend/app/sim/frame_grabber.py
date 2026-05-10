@@ -21,7 +21,7 @@ import httpx
 
 from app.config import settings
 
-logger = logging.getLogger("terrascout.sim.frames")
+logger = logging.getLogger("agriscout.sim.frames")
 
 
 def jpeg_is_usable(b64: str | None, *, min_luma: float = 5.0) -> bool:

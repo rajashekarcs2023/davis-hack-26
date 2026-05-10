@@ -30,7 +30,7 @@ export function WorkOrder({ data }: WorkOrderProps) {
 
   return (
     <article
-      className={`overflow-hidden rounded-2xl border border-white/10 bg-terrascout-card shadow-lg shadow-black/30 ${ps.border} border-l-4`}
+      className={`overflow-hidden rounded-2xl border border-white/10 bg-agriscout-card shadow-lg shadow-black/30 ${ps.border} border-l-4`}
     >
       <div className="flex flex-wrap items-start justify-between gap-2 border-b border-white/10 px-4 py-3">
         <div>

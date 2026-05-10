@@ -21,7 +21,7 @@ from app.config import settings
 from app.schemas import RobotAction, RobotState
 from app.sim.safety import DispatchBudget, review_action
 
-logger = logging.getLogger("terrascout.sim.robot")
+logger = logging.getLogger("agriscout.sim.robot")
 
 
 @dataclass

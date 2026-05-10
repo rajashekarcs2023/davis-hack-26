@@ -52,7 +52,7 @@ from app.schemas import (
     Zone,
 )
 
-logger = logging.getLogger("terrascout.vision.ollama")
+logger = logging.getLogger("agriscout.vision.ollama")
 
 # Gemma 3 needs more explicit framing than Gemini for pointing — we wrap each
 # domain prompt with these so the model knows it's emitting JSON for an
