@@ -9,6 +9,7 @@ import {
   NdviAnomalyPanel,
 } from "../../components/AssessmentAiPanels";
 import { AppHeader } from "../../components/AppHeader";
+import { FieldWorkOrderScreen } from "../../components/FieldWorkOrderScreen";
 import { GroundTruthVerificationScreen } from "../../components/GroundTruthVerificationScreen";
 import { AnomalyCard } from "./components/AnomalyCard";
 import { AnomalyDashboard } from "./components/AnomalyDashboard";
@@ -17,15 +18,13 @@ import { WeatherBar } from "./components/WeatherBar";
 
 type MonitorPageProps = {
   data: FieldPlaceholder;
-  /** After generating a work order, parent switches to the Orders tab. */
-  onNavigateToOrders?: () => void;
 };
 
 /** Monitor tab UI — prefer edits under `src/pages/monitor/`. */
-export function MonitorPage({ data, onNavigateToOrders }: MonitorPageProps) {
-  const [screen, setScreen] = useState<"map" | "assessment" | "groundTruth">(
-    "map"
-  );
+export function MonitorPage({ data }: MonitorPageProps) {
+  const [screen, setScreen] = useState<
+    "map" | "assessment" | "groundTruth" | "fieldWorkOrder"
+  >("map");
 
   return (
     <div className="space-y-4">
@@ -63,14 +62,17 @@ export function MonitorPage({ data, onNavigateToOrders }: MonitorPageProps) {
             <AssessmentMetadataGrid data={data} />
           </div>
         </>
-      ) : (
+      ) : screen === "groundTruth" ? (
         <GroundTruthVerificationScreen
           zoneLabel={data.zone}
           onBack={() => setScreen("assessment")}
-          onGenerateWorkOrder={() => {
-            onNavigateToOrders?.();
-            setScreen("map");
-          }}
+          onGenerateWorkOrder={() => setScreen("fieldWorkOrder")}
+        />
+      ) : (
+        <FieldWorkOrderScreen
+          data={data}
+          onBack={() => setScreen("groundTruth")}
+          onReturnToMonitor={() => setScreen("map")}
         />
       )}
     </div>
