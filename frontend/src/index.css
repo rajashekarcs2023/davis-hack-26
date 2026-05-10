@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  @apply bg-terrascout-bg text-white antialiased;
+}
+
+@keyframes terrascout-pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes terrascout-robot-move {
+  0% {
+    left: 12%;
+    top: 58%;
+  }
+  50% {
+    left: 48%;
+    top: 42%;
+  }
+  100% {
+    left: 58%;
+    top: 48%;
+  }
+}
+
+.animate-robot-path {
+  animation: terrascout-robot-move 4s ease-in-out infinite alternate;
+}
+
+.animate-status-dot {
+  animation: terrascout-pulse-dot 1.6s ease-in-out infinite;
+}
+
+@keyframes ground-truth-progress-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.ground-truth-progress-indeterminate {
+  animation: ground-truth-progress-slide 1.4s ease-in-out infinite;
+}
