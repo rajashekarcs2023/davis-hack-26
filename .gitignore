@@ -51,3 +51,11 @@ Thumbs.db
 # Backend run artifacts
 backend/app/data/runs/
 backend/.cache/
+
+# Data pipeline artifacts — generated outputs + synthetic sample blobs
+data_pipeline/outputs/
+data_pipeline/samples/*.npy
+data_pipeline/samples/*.tif
+data_pipeline/samples/*.tiff
+data_pipeline/samples/*.jp2
+data_pipeline/samples/*.SAFE/
