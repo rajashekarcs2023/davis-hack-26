@@ -1,5 +1,7 @@
 # AgriScout AI — HackDavis 2026
 
+**Demo** : https://youtu.be/auf6HfCe0H8
+
 **Satellite detects. Gemini reasons. Drone confirms. Robot diagnoses. Farmer approves.**
 
 AgriScout is a satellite-guided, agentic field-triage system for **multi-cause crop stress** (pest / water / nutrient / false-alarm). A Google ADK agent powered by **Gemini 2.5 Pro** reads satellite NDVI anomalies, dispatches a DAC drone for aerial confirmation, then runs a 4-step embodied-reasoning diagnostic with a LeKiwi + SO101 ground robot — with **Gemini Robotics-ER 1.6** providing spatial reasoning, a local **Gemma 4** (Ollama) fallback for cross-validated perception, and human-in-the-loop approval gates throughout.
